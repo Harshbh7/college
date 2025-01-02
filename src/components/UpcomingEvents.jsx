@@ -15,7 +15,7 @@ const events = [
 const UpcomingEvents = () => (
   <Paper sx={{ p: 2 }}>
     <Typography variant="h6" mb={2}>
-      Classes Time-Table
+      Courses Time-Table
     </Typography>
     <List>
       {events.map((event, index) => (

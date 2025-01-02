@@ -12,7 +12,7 @@ import Login from './pages/Login';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebaseConfig';
 import Sidebar from './components/Sidebar';
-import ProfilePage from './pages/ProfilePage'; // Import ProfilePage component
+import ProfilePage from './pages/ProfilePage'; 
 
 const Attendance = lazy(() => import('./pages/Attendance'));
 const Courses = lazy(() => import('./pages/Courses'));

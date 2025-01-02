@@ -3,14 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { Grid, Paper, Typography, Box } from '@mui/material';
 import { Book, Class, People } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Make sure to install axios via `npm install axios`
+import axios from 'axios';
 
-const DashboardCards = () => {
+const DashboardCards = ({ role }) => { // Accept `role` as a prop
   const [studentCount, setStudentCount] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch student data from the API
     const fetchStudentCount = async () => {
       try {
         const response = await axios.get(
@@ -18,7 +17,7 @@ const DashboardCards = () => {
         );
         const data = response.data;
         if (data) {
-          setStudentCount(Object.keys(data).length); // Count the number of students
+          setStudentCount(Object.keys(data).length);
         }
       } catch (error) {
         console.error('Error fetching student count:', error);
@@ -31,11 +30,16 @@ const DashboardCards = () => {
   const cards = [
     { label: 'Courses', count: 6, icon: <Book />, path: '/courses' },
     { label: 'Classes', count: 6, icon: <Class />, path: '/classes' },
-    { label: 'Students', count: studentCount, icon: <People />, path: '/students' }, // Use dynamic student count
+    {
+      label: 'Students',
+      count: studentCount,
+      icon: <People />,
+      path: role === 'admin' ? '/students' : '/student1', // Adjust path based on role
+    },
   ];
 
   const handleCardClick = (path) => {
-    navigate(path); // Navigate to the specified path
+    navigate(path);
   };
 
   return (
@@ -47,12 +51,12 @@ const DashboardCards = () => {
               display: 'flex',
               alignItems: 'center',
               p: 2,
-              cursor: 'pointer', // Make the card appear clickable
+              cursor: 'pointer',
               '&:hover': {
-                boxShadow: 3, // Add hover effect for better UX
+                boxShadow: 3,
               },
             }}
-            onClick={() => handleCardClick(card.path)} // Navigate on click
+            onClick={() => handleCardClick(card.path)}
           >
             <Box sx={{ mr: 2 }}>{card.icon}</Box>
             <Box>
