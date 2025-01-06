@@ -1,3 +1,4 @@
+
 // src/components/Calendar.jsx
 import React, { useState, useEffect } from 'react';
 import {
@@ -81,6 +82,23 @@ const Calendar = () => {
 
   const handleClose = () => setOpen(false);
 
+  // Handle Month Navigation
+  const handleMonthChange = (direction) => {
+    let newMonth = selectedMonth + direction;
+    let newYear = selectedYear;
+
+    if (newMonth < 0) {
+      newMonth = 11;
+      newYear -= 1;
+    } else if (newMonth > 11) {
+      newMonth = 0;
+      newYear += 1;
+    }
+
+    setSelectedMonth(newMonth);
+    setSelectedYear(newYear);
+  };
+
   return (
     <Paper sx={{ padding: 2 }}>
       <Typography variant="h6" mb={2}>
@@ -122,10 +140,10 @@ const Calendar = () => {
 
       {/* Navigation Buttons */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
-        <IconButton onClick={() => setSelectedMonth(selectedMonth - 1)}>
+        <IconButton onClick={() => handleMonthChange(-1)}>
           <ArrowBack />
         </IconButton>
-        <IconButton onClick={() => setSelectedMonth(selectedMonth + 1)}>
+        <IconButton onClick={() => handleMonthChange(1)}>
           <ArrowForward />
         </IconButton>
       </Box>
@@ -191,7 +209,6 @@ const Calendar = () => {
             </Box>
           );
         })}
-
       </Box>
 
       {/* Modal for Selected Date */}
@@ -213,7 +230,7 @@ const Calendar = () => {
               ? `Details for ${selectedDate.toLocaleDateString()}`
               : 'No Date Selected'}
           </Typography>
-          {isHoliday(selectedDate) ? (
+          {selectedDate && isHoliday(selectedDate) ? (
             holidays
               .filter(
                 (holiday) =>

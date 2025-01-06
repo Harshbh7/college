@@ -211,22 +211,27 @@ const Students = () => {
         <tbody>
           {students.map((student) => (
             <tr key={student.id}>
-              <td>{student.sr}</td>
-              <td>{student.en}</td>
-              <td>{student.rollNo}</td>
-              <td>{student.wrn}</td>
-              <td>{student.name}</td>
-              <td>{student.fathername}</td>
-              <td>{student.gender}</td>
-              <td>{student.mobile}</td>
-              <td>{student.address}</td>
-              <td>
-                <Button onClick={() => handleEdit(student)} startIcon={<EditIcon />}>Edit</Button>
-                <Button onClick={() => handleDelete(student.id)} startIcon={<DeleteIcon />}>Delete</Button>
+              <td data-label="SR">{student.sr}</td>
+              <td data-label="EN">{student.en}</td>
+              <td data-label="Roll No">{student.rollNo}</td>
+              <td data-label="WRN">{student.wrn}</td>
+              <td data-label="Name">{student.name}</td>
+              <td data-label="Father Name">{student.fathername}</td>
+              <td data-label="Gender">{student.gender}</td>
+              <td data-label="Mobile">{student.mobile}</td>
+              <td data-label="Address">{student.address}</td>
+              <td data-label="Actions">
+                <Button onClick={() => handleEdit(student)} startIcon={<EditIcon />}>
+                  Edit
+                </Button>
+                <Button onClick={() => handleDelete(student.id)} startIcon={<DeleteIcon />}>
+                  Delete
+                </Button>
               </td>
             </tr>
           ))}
         </tbody>
+
       </table>
       <Dialog open={isModalOpen} onClose={handleCloseModal}>
         <DialogTitle>{isEditing ? "Edit Student" : "Add Student"}</DialogTitle>

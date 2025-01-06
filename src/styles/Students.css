@@ -1,82 +1,78 @@
 /* src/styles/Students.css */
 
-/* Print button styling */
-.print-btn {
-    margin: 20px 0;
-    padding: 10px 20px;
-    background-color: blue;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
+/* General container styling */
+.students-container {
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 1200px;
+  position: relative;
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Table headers */
+th {
+  background-color: #4caf50;
+  color: white;
+  padding: 12px;
+  text-align: left;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Table rows */
+td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+/* Table row hover effect */
+tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+  /* Hide table headers */
+  thead {
+    display: none;
+  }
+
+  /* Each row becomes a flex container */
+  tbody tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
     border-radius: 5px;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-  }
-  
-  .print-btn:hover {
-    background-color: #45a049;
-  }
-  
-  /* Icon inside the print button */
-  .print-icon {
-    margin-right: 8px;
-  }
-  
-  /* Styling for the button position on the right side */
-  .students-container {
-    padding: 20px;
-    margin: 0 auto;
-    max-width: 1200px;
-    position: relative;
-  }
-  
-  /* Table styling */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Table headers */
-  th {
-    background-color: #4caf50;
-    color: white;
-    padding: 12px;
-    text-align: left;
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
-  /* Table rows */
-  td {
     padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Each cell displays as a block */
+  td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
     font-size: 14px;
+    border: none;
   }
-  
-  /* Table row hover effect */
-  tr:hover {
-    background-color: #f5f5f5;
+
+  /* Add labels for each cell */
+  td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 10px;
+    color: #4caf50;
+    flex-shrink: 0;
   }
-  
-  /* Loading and error messages */
-  .loading,
-  .error {
-    font-size: 18px;
-    text-align: center;
-    margin-top: 50px;
-    color: #ff6347;
-  }
-  
-  /* Header styling */
-  h2 {
-    font-size: 24px;
-    color: #333;
-    font-weight: 600;
-    text-align: center;
-  }
-  
+}

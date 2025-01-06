@@ -12,9 +12,11 @@ import Login from './pages/Login';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebaseConfig';
 import Sidebar from './components/Sidebar';
-import ProfilePage from './pages/ProfilePage'; 
+import ProfilePage from './pages/ProfilePage';
 
+// Lazy-loaded components
 const Attendance = lazy(() => import('./pages/Attendance'));
+// const StuAttendance = lazy(() => import('./pages/StuAttendance'));
 const Courses = lazy(() => import('./pages/Courses'));
 const Exams = lazy(() => import('./pages/Exams'));
 const Students = lazy(() => import('./pages/Students'));
@@ -70,14 +72,19 @@ const App = () => {
                   <>
                     {role === 'admin' ? (
                       <>
-                        <Route path="/" element={<>
-                          <DashboardCards />
-                          <WeeklySchedule />
-                          <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
-                            <Calendar />
-                            <UpcomingEvents />
-                          </Box>
-                          </>} /> 
+                        <Route
+                          path="/"
+                          element={
+                            <>
+                              <DashboardCards />
+                              <WeeklySchedule />
+                              <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
+                                <Calendar />
+                                <UpcomingEvents />
+                              </Box>
+                            </>
+                          }
+                        />
                         <Route path="/courses" element={<Courses />} />
                         <Route path="/exams" element={<Exams />} />
                         <Route path="/students" element={<Students />} />
@@ -86,21 +93,28 @@ const App = () => {
                       </>
                     ) : (
                       <>
-                        <Route path="/" element={<>
-                          <DashboardCards />
-                          <WeeklySchedule />
-                          <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
-                            <Calendar />
-                            <UpcomingEvents />
-                          </Box>
-                          </>} /> 
+                        <Route
+                          path="/"
+                          element={
+                            <>
+                              <DashboardCards />
+                              <WeeklySchedule />
+                              <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
+                                <Calendar />
+                                <UpcomingEvents />
+                              </Box>
+                            </>
+                          }
+                        />
                         <Route path="/courses" element={<Courses />} />
                         <Route path="/exams" element={<Exams />} />
                         <Route path="/student1" element={<Student1 />} />
+                        <Route path="/attendance" element={<Attendance />} />
+                        {/* <Route path="/stuattendance" element={<StuAttendance />} /> */}
                         <Route path="/chat" element={<Chat />} />
                       </>
                     )}
-                    <Route path="/profile" element={<ProfilePage />} /> {/* Profile page route */}
+                    <Route path="/profile" element={<ProfilePage />} />
                     <Route path="*" element={<Navigate to="/" />} />
                   </>
                 ) : (

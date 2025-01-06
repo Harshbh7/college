@@ -5,7 +5,7 @@ import { Book, Class, People } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const DashboardCards = ({ role }) => { // Accept `role` as a prop
+const DashboardCards = ({ role }) => {
   const [studentCount, setStudentCount] = useState(0);
   const navigate = useNavigate();
 
@@ -34,7 +34,7 @@ const DashboardCards = ({ role }) => { // Accept `role` as a prop
       label: 'Students',
       count: studentCount,
       icon: <People />,
-      path: role === 'admin' ? '/students' : '/student1', // Adjust path based on role
+      path: role === 'admin' ? '/student1' : '/students', // Adjust path based on role
     },
   ];
 
@@ -43,25 +43,51 @@ const DashboardCards = ({ role }) => { // Accept `role` as a prop
   };
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} sx={{ justifyContent: 'center' }}>
       {cards.map((card, index) => (
-        <Grid item xs={12} sm={4} key={index}>
+        <Grid
+          item
+          xs={12} // 100% width on small screens
+          sm={6}  // 50% width on small/medium screens
+          md={4}  // 33% width on medium/large screens
+          key={index}
+        >
           <Paper
             sx={{
               display: 'flex',
+              flexDirection: 'row',
               alignItems: 'center',
               p: 2,
               cursor: 'pointer',
+              borderRadius: '8px',
               '&:hover': {
                 boxShadow: 3,
               },
             }}
             onClick={() => handleCardClick(card.path)}
           >
-            <Box sx={{ mr: 2 }}>{card.icon}</Box>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                bgcolor: '#1976D2',
+                borderRadius: '50%',
+                p: 2,
+                mr: 2,
+                minWidth: '50px',
+                minHeight: '50px',
+              }}
+            >
+              {card.icon}
+            </Box>
             <Box>
-              <Typography variant="h6">{card.count}</Typography>
-              <Typography variant="body2">{card.label}</Typography>
+              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                {card.count}
+              </Typography>
+              <Typography variant="body2" sx={{ color: '#555' }}>
+                {card.label}
+              </Typography>
             </Box>
           </Paper>
         </Grid>
@@ -71,3 +97,4 @@ const DashboardCards = ({ role }) => { // Accept `role` as a prop
 };
 
 export default DashboardCards;
+

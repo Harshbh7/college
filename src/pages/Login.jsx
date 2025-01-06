@@ -24,7 +24,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
 
-const Login = ({ onLogin }) => {
+const Login = ({ onLogin, setUserData }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -38,9 +38,11 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
       onLogin();
-      navigate('/'); // Redirect to dashboard
+      setUserData(user); // Set user data (email, etc.) to be passed to ProfilePage
+      navigate('/profile'); // Redirect to profile page
     } catch (error) {
       alert('Invalid credentials. Please try again.');
       console.error(error);
@@ -49,9 +51,11 @@ const Login = ({ onLogin }) => {
 
   const handleGoogleSignIn = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
+      const userCredential = await signInWithPopup(auth, googleProvider);
+      const user = userCredential.user;
       onLogin();
-      navigate('/'); // Redirect to dashboard
+      setUserData(user); // Set user data (email, etc.) to be passed to ProfilePage
+      navigate('/profile'); // Redirect to profile page
     } catch (error) {
       alert('Google sign-in failed. Please try again.');
       console.error(error);
@@ -125,27 +129,26 @@ const Login = ({ onLogin }) => {
               Sign in with Google
             </Button>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 2 }}>
-  <Link
-    href="#"
-    variant="body2"
-    color="primary"
-    underline="hover"
-    onClick={() => setResetDialogOpen(true)}
-    sx={{ fontSize: '0.9rem', marginBottom: 1 }}
-  >
-    Forgot Password?
-  </Link>
-  <Link
-    href="/signup"
-    variant="body2"
-    color="primary"
-    underline="hover"
-    sx={{ fontSize: '0.9rem' }}
-  >
-    Don't have an account? Sign Up
-  </Link>
-</Box>
-
+              <Link
+                href="#"
+                variant="body2"
+                color="primary"
+                underline="hover"
+                onClick={() => setResetDialogOpen(true)}
+                sx={{ fontSize: '0.9rem', marginBottom: 1 }}
+              >
+                Forgot Password?
+              </Link>
+              <Link
+                href="/signup"
+                variant="body2"
+                color="primary"
+                underline="hover"
+                sx={{ fontSize: '0.9rem' }}
+              >
+                Don't have an account? Sign Up
+              </Link>
+            </Box>
           </form>
         </Box>
       </Grid>

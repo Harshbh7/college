@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import "../styles/Students.css";
+import "../styles/Student1.css";
 
 const Student1 = () => {
   const [Student1, setStudent1] = useState([]);
@@ -42,36 +42,38 @@ const Student1 = () => {
   return (
     <div className="Student1-container">
       <h2>Student List</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>SR. No.</th>
-            <th>EN. No.</th>
-            <th>Roll No.</th>
-            <th>WRN</th>
-            <th>Name</th>
-            <th>Father's Name</th>
-            <th>Gender</th>
-            <th>Mobile No.</th>
-            <th>Address</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Student1.map((student) => (
-            <tr key={student.id}>
-              <td>{student.sr}</td>
-              <td>{student.en}</td>
-              <td>{student.rollNo}</td>
-              <td>{student.wrn}</td>
-              <td>{student.name}</td>
-              <td>{student.fathername}</td>
-              <td>{student.gender}</td>
-              <td>{student.mobile}</td>
-              <td>{student.address}</td>
+      <div className="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>SR. No.</th>
+              <th>EN. No.</th>
+              <th>Roll No.</th>
+              <th>WRN</th>
+              <th>Name</th>
+              <th>Father's Name</th>
+              <th>Gender</th>
+              <th>Mobile No.</th>
+              <th>Address</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {Student1.map((student) => (
+              <tr key={student.id}>
+                <td data-label="SR. No.">{student.sr}</td>
+                <td data-label="EN. No.">{student.en}</td>
+                <td data-label="Roll No.">{student.rollNo}</td>
+                <td data-label="WRN">{student.wrn}</td>
+                <td data-label="Name">{student.name}</td>
+                <td data-label="Father's Name">{student.fathername}</td>
+                <td data-label="Gender">{student.gender}</td>
+                <td data-label="Mobile No.">{student.mobile}</td>
+                <td data-label="Address">{student.address}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

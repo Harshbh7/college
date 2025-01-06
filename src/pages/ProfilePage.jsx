@@ -1,20 +1,50 @@
 // src/pages/ProfilePage.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Card, CardContent, Typography, Avatar, Grid, TextField, Button, IconButton } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
+import { auth } from "../firebaseConfig"; // import firebase config
+import { onAuthStateChanged } from "firebase/auth";
+import axios from "axios";
 
 const ProfilePage = () => {
-  const [isEditing, setIsEditing] = useState(false); // State to track if we are in edit mode
-  const [userProfile, setUserProfile] = useState({
-    photoUrl: "https://via.placeholder.com/150", // Replace with user's actual photo URL
-    name: "John Doe",
-    fatherName: "Richard Doe",
-    dob: "1995-05-15",
-    enrollmentNo: "EN12345678",
-    wrn: "WRN87654321",
-    mobile: "+1 123 456 7890",
-    address: "123 Elm Street, Springfield, USA",
-  });
+  const [isEditing, setIsEditing] = useState(false);
+  const [userProfile, setUserProfile] = useState(null); // User profile data
+  const [loading, setLoading] = useState(true); // Loading state to handle API call
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        // Listen for user authentication state
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            // Fetch user data from the database if user is logged in
+            const response = await axios.get(
+              `https://college-fde10-default-rtdb.firebaseio.com/student_data.json`
+            );
+            const studentsData = response.data;
+
+            // Find the student matching the email of the logged-in user
+            const loggedInUserEmail = user.email;
+            const student = Object.values(studentsData).find(student => student.email === loggedInUserEmail);
+
+            if (student) {
+              setUserProfile(student); // Set the user data if found
+            } else {
+              alert("No profile found for this user.");
+            }
+          } else {
+            alert("User is not logged in.");
+          }
+          setLoading(false);
+        });
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchUserData(); // Call the function to fetch user data
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,22 +55,26 @@ const ProfilePage = () => {
   };
 
   const handleSave = () => {
-    setIsEditing(false); // Exit edit mode after saving
-    // Here, you can add logic to save the profile changes, e.g., update the database.
+    setIsEditing(false);
+    // Add logic to save the updated user data if needed
     console.log("Profile saved", userProfile);
   };
 
   const handleEdit = () => {
-    setIsEditing(true); // Enter edit mode
+    setIsEditing(true);
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
       <Card sx={{ maxWidth: 600, width: "100%", padding: 2 }}>
         <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
           <Avatar
-            src={userProfile.photoUrl}
-            alt={userProfile.name}
+            src={userProfile?.photoUrl || "https://via.placeholder.com/150"} // Default photo if none available
+            alt={userProfile?.name || "User"}
             sx={{ width: 120, height: 120 }}
           />
         </Box>
@@ -48,7 +82,7 @@ const ProfilePage = () => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant="h5" align="center" gutterBottom>
-                {userProfile.name}
+                {userProfile?.name}
                 {!isEditing && (
                   <IconButton onClick={handleEdit} sx={{ ml: 2 }}>
                     <EditIcon />
@@ -63,12 +97,27 @@ const ProfilePage = () => {
               {isEditing ? (
                 <TextField
                   fullWidth
-                  name="fatherName"
-                  value={userProfile.fatherName}
+                  name="fathername"
+                  value={userProfile?.fathername || ""}
                   onChange={handleChange}
                 />
               ) : (
-                <Typography>{userProfile.fatherName}</Typography>
+                <Typography>{userProfile?.fathername}</Typography>
+              )}
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="subtitle1" color="textSecondary">
+                <strong>Mother Name:</strong>
+              </Typography>
+              {isEditing ? (
+                <TextField
+                  fullWidth
+                  name="mothername"
+                  value={userProfile?.mothername || ""}
+                  onChange={handleChange}
+                />
+              ) : (
+                <Typography>{userProfile?.mothername}</Typography>
               )}
             </Grid>
             <Grid item xs={6}>
@@ -80,11 +129,11 @@ const ProfilePage = () => {
                   fullWidth
                   type="date"
                   name="dob"
-                  value={userProfile.dob}
+                  value={userProfile?.dob || ""}
                   onChange={handleChange}
                 />
               ) : (
-                <Typography>{userProfile.dob}</Typography>
+                <Typography>{userProfile?.dob}</Typography>
               )}
             </Grid>
             <Grid item xs={6}>
@@ -94,12 +143,12 @@ const ProfilePage = () => {
               {isEditing ? (
                 <TextField
                   fullWidth
-                  name="enrollmentNo"
-                  value={userProfile.enrollmentNo}
+                  name="en"
+                  value={userProfile?.en || ""}
                   onChange={handleChange}
                 />
               ) : (
-                <Typography>{userProfile.enrollmentNo}</Typography>
+                <Typography>{userProfile?.en}</Typography>
               )}
             </Grid>
             <Grid item xs={6}>
@@ -110,11 +159,11 @@ const ProfilePage = () => {
                 <TextField
                   fullWidth
                   name="wrn"
-                  value={userProfile.wrn}
+                  value={userProfile?.wrn || ""}
                   onChange={handleChange}
                 />
               ) : (
-                <Typography>{userProfile.wrn}</Typography>
+                <Typography>{userProfile?.wrn}</Typography>
               )}
             </Grid>
             <Grid item xs={6}>
@@ -125,14 +174,29 @@ const ProfilePage = () => {
                 <TextField
                   fullWidth
                   name="mobile"
-                  value={userProfile.mobile}
+                  value={userProfile?.mobile || ""}
                   onChange={handleChange}
                 />
               ) : (
-                <Typography>{userProfile.mobile}</Typography>
+                <Typography>{userProfile?.mobile}</Typography>
               )}
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={6}>
+              <Typography variant="subtitle1" color="textSecondary">
+                <strong>E-Mail:</strong>
+              </Typography>
+              {isEditing ? (
+                <TextField
+                  fullWidth
+                  name="email"
+                  value={userProfile?.email || ""}
+                  onChange={handleChange}
+                />
+              ) : (
+                <Typography>{userProfile?.email}</Typography>
+              )}
+            </Grid>
+            <Grid item xs={6}>
               <Typography variant="subtitle1" color="textSecondary">
                 <strong>Address:</strong>
               </Typography>
@@ -140,11 +204,11 @@ const ProfilePage = () => {
                 <TextField
                   fullWidth
                   name="address"
-                  value={userProfile.address}
+                  value={userProfile?.address || ""}
                   onChange={handleChange}
                 />
               ) : (
-                <Typography>{userProfile.address}</Typography>
+                <Typography>{userProfile?.address}</Typography>
               )}
             </Grid>
           </Grid>
