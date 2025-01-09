@@ -1,37 +1,16 @@
 // src/pages/attendance.jsx
 import React, { useState, useEffect } from 'react';
-import {
-  Container,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Button,
-  CircularProgress,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Box,
-} from '@mui/material';
+import * as XLSX from 'xlsx';  // Import the XLSX library
 import Swal from 'sweetalert2';
-import axios from 'axios';
-import * as XLSX from 'xlsx'; // Import the xlsx library
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebaseConfig';
+import '../styles/Attendance.css';
+import { Button, Select, MenuItem, FormControl, InputLabel, CircularProgress } from '@mui/material'; // Import MUI components
 
-const FIREBASE_URL = 'https://college-fde10-default-rtdb.firebaseio.com/attendance';
-const STUDENT_LIST_URL = 'https://college-fde10-default-rtdb.firebaseio.com/student_list.json';
-
-// Function to detect browser and adjust targetLocation
 function getTargetLocation() {
   const userAgent = navigator.userAgent.toLowerCase();
   if (userAgent.includes('chrome')) {
     return {
-      latitude: 27.1766701,// home
-      longitude: 78.0080745,//home
+      latitude:  27.1407174,
+      longitude: 78.0309542,
     };
   } else if (userAgent.includes('edge')) {
     return {
@@ -46,366 +25,401 @@ function getTargetLocation() {
 }
 
 const targetLocation = getTargetLocation();
-const maxDistance = 50;
+const maxDistance = 50; // in meters (50 meters)
 
-function calculateDistance(lat1, lon1, lat2, lon2) {
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371000; // Earth radius in meters
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLon = ((lon2 - lon1) * Math.PI) / 180;
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos((lat1 * Math.PI) / 180) *
-    Math.cos((lat2 * Math.PI) / 180) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c; // returns distance in meters
-}
+};
 
 const Attendance = () => {
-  const [month, setMonth] = useState(new Date().getMonth() + 1); // Default current month
-  const [year, setYear] = useState(new Date().getFullYear()); // Default current year
-  const [date, setDate] = useState(new Date().getDate()); // Default current date
   const [students, setStudents] = useState([]);
-  const [attendance, setAttendance] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [role, setRole] = useState(null);
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState('');
+  const [date, setDate] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
 
-  const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setUserLocation({ latitude, longitude });
+        },
+        (error) => {
+          Swal.fire({
+            title: 'Error',
+            text: 'Unable to retrieve your location.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        }
+      );
+    }
+  }, []);
+
+  const months = [
+    'January', 'February', 'March', 'April', 'May',
+    'June', 'July', 'August', 'September', 'October', 'November', 'December',
   ];
 
-  const handleMonthChange = (e) => setMonth(e.target.value);
-  const handleYearChange = (e) => setYear(e.target.value);
-  const handleDateChange = (e) => setDate(e.target.value);
+  const fetchStudentData = async () => {
+    if (!year || !month || !date) return;
 
-  const generateDateOptions = () => {
-    const daysInMonth = new Date(year, month, 0).getDate();
-    const workingDays = [];
+    setLoading(true);
 
-    for (let i = 1; i <= daysInMonth; i++) {
-      const date = new Date(year, month - 1, i);
-      if (date.getDay() !== 0) {
-        workingDays.push(i);
-      }
+    try {
+      // Fetch student names
+      const studentListResponse = await fetch(
+        `https://college-fde10-default-rtdb.firebaseio.com/student_list.json`
+      );
+      const studentListData = await studentListResponse.json();
+
+      // Fetch attendance data for the selected date
+      const attendanceResponse = await fetch(
+        `https://college-fde10-default-rtdb.firebaseio.com/attendance/${year}/${month}/${date}.json`
+      );
+      const attendanceData = await attendanceResponse.json();
+
+      const combinedData = Object.keys(studentListData).map((studentId) => ({
+        id: studentId,
+        name: studentListData[studentId]?.name || `Student ${studentId}`,
+        status: attendanceData?.[studentId]?.status || 'N/A',
+      }));
+
+      setStudents(combinedData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setStudents([]);
+    } finally {
+      setLoading(false);
     }
-
-    return workingDays;
   };
 
-  const generateYearOptions = () => Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i);
-
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setRole(user.email === 'harshbh8112@gmail.com' ? 'admin' : 'student');
-      }
-    });
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const { data } = await axios.get(STUDENT_LIST_URL);
-        const studentArray = Object.keys(data || {}).map((key) => ({
-          id: key,
-          sr: data[key].sr,
-          name: data[key].name,
-        }));
-        setStudents(studentArray);
-
-        const initialAttendance = studentArray.reduce((acc, student) => {
-          acc[student.id] = {};
-          return acc;
-        }, {});
-
-        setAttendance(initialAttendance);
-      } catch (error) {
-        console.error('Failed to fetch students:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStudents();
-  }, []);
-
-  useEffect(() => {
-    const fetchAttendanceData = async () => {
-      try {
-        const attendancePath = `/${year}/${month}/${date}.json`;
-        const { data } = await axios.get(`${FIREBASE_URL}${attendancePath}`);
-        if (data) {
-          setAttendance(data);
-        }
-      } catch (error) {
-        console.error('Failed to fetch attendance data:', error);
-      }
-    };
-
-    if (year && month && date) {
-      fetchAttendanceData();
-    }
+    fetchStudentData();
   }, [year, month, date]);
 
-  const handleAttendanceChange = (studentId, status) => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const userLatitude = position.coords.latitude;
-        const userLongitude = position.coords.longitude;
-        const distance = calculateDistance(
-          targetLocation.latitude,
-          targetLocation.longitude,
-          userLatitude,
-          userLongitude
-        );
+  const updateStatus = async (studentId, newStatus) => {
+    if (!userLocation) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Unable to determine your location. Please try again later.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
 
-        if (distance <= maxDistance) {
-          setAttendance((prev) => ({
-            ...prev,
-            [studentId]: {
-              ...prev[studentId],
-              [`${year}-${month}-${date}`]: {
-                status,
-                year,
-                month,
-                date,
-                time: new Date().toLocaleTimeString(),
-                latitude: userLatitude,
-                longitude: userLongitude,
-              },
-            },
-          }));
-          Swal.fire('Success', 'Attendance marked as Present!', 'success');
-        } else {
-          Swal.fire('Error', 'You are not within the allowed distance!', 'error');
-        }
-      },
-      (error) => {
-        let errorMessage = 'An error occurred.';
-        if (error.code === error.PERMISSION_DENIED) {
-          errorMessage = 'Permission denied. Enable location access.';
-        } else if (error.code === error.POSITION_UNAVAILABLE) {
-          errorMessage = 'Location unavailable. Check settings.';
-        } else if (error.code === error.TIMEOUT) {
-          errorMessage = 'Request timed out. Try again.';
-        }
-        Swal.fire('Error', errorMessage, 'error');
-      }
+    const distance = calculateDistance(
+      userLocation.latitude,
+      userLocation.longitude,
+      targetLocation.latitude,
+      targetLocation.longitude
     );
-  };
 
-  const saveAttendanceToFirebase = async () => {
+    if (distance > maxDistance) {
+      Swal.fire({
+        title: 'Too Far to Mark Attendance',
+        text: `You are ${Math.round(distance)} meters away from the target location. Attendance can only be marked within ${maxDistance} meters.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
     try {
-      for (let studentId in attendance) {
-        const attendanceData = attendance[studentId][`${year}-${month}-${date}`];
-        if (attendanceData) {
-          const attendancePath = `attendance/${year}/${monthNames[month - 1]}/${date}/${studentId}.json`;
-          await axios.patch(`https://college-fde10-default-rtdb.firebaseio.com/${attendancePath}`, attendanceData);
-        }
+      const url = `https://college-fde10-default-rtdb.firebaseio.com/attendance/${year}/${month}/${date}/${studentId}.json`;
+      const response = await fetch(url, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (response.ok) {
+        // Update the local state
+        setStudents((prevStudents) =>
+          prevStudents.map((student) =>
+            student.id === studentId ? { ...student, status: newStatus } : student
+          )
+        );
+      } else {
+        console.error('Failed to update status');
       }
-      Swal.fire('Success', 'Attendance saved successfully!', 'success');
     } catch (error) {
-      Swal.fire('Error', 'Failed to save attendance.', 'error');
+      console.error('Error updating status:', error);
     }
   };
 
   const exportToExcel = () => {
-    const formattedData = students.map((student) => {
-      const studentAttendance = attendance[student.id] || {};
-      return {
-        ID: student.sr,
-        Name: student.name,
-        Status: studentAttendance[`${year}-${month}-${date}`]?.status || 'Absent',
-        Year: year,
-        Month: monthNames[month - 1],
-        Date: date,
-        Time: studentAttendance[`${year}-${month}-${date}`]?.time || '',
-        Latitude: studentAttendance[`${year}-${month}-${date}`]?.latitude || '',
-        Longitude: studentAttendance[`${year}-${month}-${date}`]?.longitude || '',
-      };
-    });
+    const formattedData = students.map((student, index) => ({
+      SrNo: index + 1, // Add serial number here
+      Name: student.name,
+      Status: student.status,
+      Year: year,
+      Month: month,
+      Date: date,
+    }));
 
     const ws = XLSX.utils.json_to_sheet(formattedData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Attendance');
-    XLSX.writeFile(wb, `Attendance_${year}-${monthNames[month - 1]}-${date}.xlsx`);
+    XLSX.writeFile(wb, `Attendance_${year}-${month}-${date}.xlsx`);
   };
 
-  if (loading) {
-    return (
-      <Container>
-        <CircularProgress />
-      </Container>
-    );
-  }
+  const getButtonStyle = (status) => {
+    switch (status) {
+      case 'Present':
+        return { backgroundColor: 'green', color: '#fff' };
+      case 'Absent':
+        return { backgroundColor: 'red', color: '#fff' };
+      default:
+        return { backgroundColor: 'grey', color: '#fff' };
+    }
+  };
 
   return (
-    <Container>
-      <h1>Attendance</h1>
-      <>
-        {role === 'admin' && (
-          <FormControl style={{ marginRight: '10px' }}>
-            <InputLabel>Date</InputLabel>
-            <Select value={date} onChange={handleDateChange}>
-              {generateDateOptions().map((day) => (
-                <MenuItem key={day} value={day}>
-                  {day}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        )}
-        <FormControl style={{ marginRight: '10px' }}>
-          <InputLabel>Month</InputLabel>
-          <Select value={month} onChange={handleMonthChange}>
-            {monthNames.map((name, index) => (
-              <MenuItem key={index + 1} value={index + 1}>
-                {name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl>
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+      <h2 style={{ textAlign: 'center', marginBottom: '30px', color: '#3f51b5' }}>Attendance</h2>
+
+      <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between' }}>
+        <FormControl style={{ marginRight: '10px', width: '30%' }}>
           <InputLabel>Year</InputLabel>
-          <Select value={year} onChange={handleYearChange}>
-            {generateYearOptions().map((yearOption) => (
-              <MenuItem key={yearOption} value={yearOption}>
-                {yearOption}
+          <Select value={year} onChange={(e) => setYear(Number(e.target.value))}>
+            {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i).map((y) => (
+              <MenuItem key={y} value={y}>
+                {y}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
-      </>
 
-      <Box
-  sx={{
-    overflowX: 'auto',
-    marginTop: 2,
-    '& table': {
-      minWidth: 650,
-    },
-    '& th, & td': {
-      whiteSpace: 'nowrap',
-    },
-    '@media (max-width: 600px)': {
-      '& table': {
-        display: 'block', // Make table act like a block
-      },
-      '& thead': {
-        display: 'none', // Hide table headers on small screens
-      },
-      '& tbody': {
-        display: 'block', // Display table rows as block
-      },
-      '& tr': {
-        display: 'block', // Make each row a block
-        borderBottom: '1px solid #ddd',
-        marginBottom: '16px',
-      },
-      '& td': {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '8px',
-        fontSize: '14px',
-      },
-      '& td::before': {
-        content: 'attr(data-label)', // Use attribute as a label
-        fontWeight: 'bold',
-        flex: '1 0 40%',
-      },
-      // Hide 'Sr.' and 'Status' columns on small screens
-      '& td:nth-of-type(1), & td:nth-of-type(3)': {
-        display: 'none',
-      },
-      '& .action-buttons': {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '8px',
-      },
-    },
-    '@media (min-width: 601px)': {
-      // Make sure columns are visible on larger screens
-      '& td:nth-of-type(1), & td:nth-of-type(3)': {
-        display: 'table-cell', // Show 'Sr.' and 'Status' on larger screens
-      },
-    },
-  }}
->
-  <TableContainer>
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Sr.</TableCell>
-          <TableCell>Name</TableCell>
-          <TableCell>Status</TableCell>
-          <TableCell>Action</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {students.map((student, index) => {
-          const studentAttendance = attendance[student.id] || {};
-          const currentStatus = studentAttendance[`${year}-${month}-${date}`]?.status || 'Absent';
+        <FormControl style={{ marginRight: '10px', width: '30%' }}>
+          <InputLabel>Month</InputLabel>
+          <Select value={month} onChange={(e) => setMonth(e.target.value)}>
+            <MenuItem value="">Month</MenuItem>
+            {months.map((m, index) => (
+              <MenuItem key={index} value={m}>
+                {m}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-          return (
-            <TableRow key={student.id}>
-              <TableCell data-label="Sr.">{index + 1}</TableCell>
-              <TableCell data-label="Name">{student.name}</TableCell>
-              <TableCell data-label="Status">{currentStatus}</TableCell>
-              <TableCell data-label="Action">
-                <Box className="action-buttons">
-                  <Button
-                    onClick={() => handleAttendanceChange(student.id, 'Present')}
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                  >
-                    Present
-                  </Button>
-                  <Button
-                    onClick={() => handleAttendanceChange(student.id, 'Absent')}
-                    variant="contained"
-                    color="secondary"
-                    size="small"
-                  >
-                    Absent
-                  </Button>
-                </Box>
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
-  </TableContainer>
-</Box>
+        <FormControl style={{ width: '30%' }}>
+          <InputLabel>Date</InputLabel>
+          <Select value={date} onChange={(e) => setDate(e.target.value)}>
+            <MenuItem value="">Date</MenuItem>
+            {month &&
+              Array.from({ length: new Date(year, months.indexOf(month) + 1, 0).getDate() }, (_, i) => i + 1)
+                .filter((d) => new Date(year, months.indexOf(month), d).getDay() !== 0) // Exclude Sundays
+                .map((d) => (
+                  <MenuItem key={d} value={d}>
+                    {d}
+                  </MenuItem>
+                ))}
+          </Select>
+        </FormControl>
+      </div>
 
+      <Button
+        variant="contained"
+        onClick={exportToExcel}
+        style={{ marginBottom: '20px', backgroundColor: '#4CAF50', color: '#fff', fontWeight: 'bold' }}
+      >
+        Export to Excel
+      </Button>
 
-
-      {role === 'admin' && (
-        <Box sx={{ marginTop: 2 }}>
-          <Button variant="contained" color="success" onClick={saveAttendanceToFirebase}>
-            Save Attendance
-          </Button>
-          <Button variant="contained" color="info" onClick={exportToExcel}>
-            Export to Excel
-          </Button>
-        </Box>
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr>
+                <th style={{ padding: '8px', border: '1px solid #ddd' }}>Sr. No.</th> {/* Add Sr. No. column */}
+                <th style={{ padding: '8px', border: '1px solid #ddd' }}>Student Name</th>
+                <th style={{ padding: '8px', border: '1px solid #ddd' }}>Status</th>
+                <th style={{ padding: '8px', border: '1px solid #ddd' }}>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {students.map((student, index) => (
+                <tr key={student.id}>
+                  <td style={{ padding: '8px', border: '1px solid #ddd' }}>{index + 1}</td> {/* Display serial number */}
+                  <td style={{ padding: '8px', border: '1px solid #ddd' }}>{student.name}</td>
+                  <td style={{ padding: '8px', border: '1px solid #ddd' }}>{student.status}</td>
+                  <td style={{ padding: '8px', border: '1px solid #ddd' }}>
+                    <Button
+                      variant="contained"
+                      style={getButtonStyle(student.status)}
+                      onClick={() =>
+                        updateStatus(
+                          student.id,
+                          student.status === 'Present' ? 'Absent' : 'Present'
+                        )
+                      }
+                    >
+                      {student.status === 'Present' ? 'Present ' : 'Absent'}
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
-    </Container>
+    </div>
   );
 };
 
 export default Attendance;
+
+
+
+
+// import React, { useState, useEffect } from 'react';
+// import Swal from 'sweetalert2';
+// import { Button, Select, MenuItem, FormControl, InputLabel, CircularProgress } from '@mui/material'; // Import MUI components
+// import * as XLSX from 'xlsx';
+// import '../styles/Attendance.css';
+
+// // Define your component
+// const StuAttendance = () => {
+//   const [attendance, setAttendance] = useState([]); // Store attendance data for Student with id 'OFg7ivkOKVsAzxEEQP7'
+//   const [year, setYear] = useState(new Date().getFullYear()); // Default year
+//   const [month, setMonth] = useState(''); // Default month
+//   const [loading, setLoading] = useState(false); // Loading state
+
+//   // List of months for the dropdown
+//   const months = [
+//     'January', 'February', 'March', 'April', 'May',
+//     'June', 'July', 'August', 'September', 'October', 'November', 'December',
+//   ];
+
+//   // Student ID
+//   const studentId = "OFg7ivkOKVsAzxEEQP7";
+
+//   // Function to fetch attendance for Student 1 based on selected year and month
+//   const fetchStudentAttendance = async () => {
+//     if (!year || !month) return;
+
+//     setLoading(true);
+
+//     try {
+//       // Fetch attendance data for the specific student
+//       const response = await fetch(
+//         `https://college-fde10-default-rtdb.firebaseio.com/attendance/${year}/${month}/${studentId}.json`
+//       );
+//       const data = await response.json();
+//       setAttendance(data || {}); // Store data for Student 1
+//     } catch (error) {
+//       console.error('Error fetching attendance data:', error);
+//       Swal.fire({
+//         title: 'Error',
+//         text: 'Unable to fetch attendance data for Student 1.',
+//         icon: 'error',
+//         confirmButtonText: 'OK',
+//       });
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   // Fetch student attendance when year or month changes
+//   useEffect(() => {
+//     fetchStudentAttendance();
+//   }, [year, month]);
+
+//   // Export attendance to Excel
+//   const exportToExcel = () => {
+//     const formattedData = Object.keys(attendance).map((date) => ({
+//       Date: new Date(date).getDate(), // Extract day of the month
+//       Status: attendance[date]?.status || 'N/A',
+//     }));
+
+//     const ws = XLSX.utils.json_to_sheet(formattedData);
+//     const wb = XLSX.utils.book_new();
+//     XLSX.utils.book_append_sheet(wb, ws, 'Attendance');
+//     XLSX.writeFile(wb, `Student_Attendance_${studentId}_${year}-${month}.xlsx`);
+//   };
+
+//   return (
+//     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+//       <h2 style={{ textAlign: 'center', marginBottom: '30px', color: '#3f51b5' }}>Student 1 - Attendance</h2>
+
+//       <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between' }}>
+//         <FormControl style={{ marginRight: '10px', width: '30%' }}>
+//           <InputLabel>Year</InputLabel>
+//           <Select value={year} onChange={(e) => setYear(Number(e.target.value))}>
+//             {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i).map((y) => (
+//               <MenuItem key={y} value={y}>
+//                 {y}
+//               </MenuItem>
+//             ))}
+//           </Select>
+//         </FormControl>
+
+//         <FormControl style={{ width: '30%' }}>
+//           <InputLabel>Month</InputLabel>
+//           <Select value={month} onChange={(e) => setMonth(e.target.value)}>
+//             <MenuItem value="">Month</MenuItem>
+//             {months.map((m, index) => (
+//               <MenuItem key={index} value={m}>
+//                 {m}
+//               </MenuItem>
+//             ))}
+//           </Select>
+//         </FormControl>
+//       </div>
+
+//       <Button
+//         variant="contained"
+//         onClick={exportToExcel}
+//         style={{ marginBottom: '20px', backgroundColor: '#4CAF50', color: '#fff', fontWeight: 'bold' }}
+//       >
+//         Export to Excel
+//       </Button>
+
+//       {loading ? (
+//         <CircularProgress />
+//       ) : (
+//         <div style={{ overflowX: 'auto' }}>
+//           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+//             <thead>
+//               <tr>
+//                 <th style={{ padding: '8px', border: '1px solid #ddd' }}>Date</th>
+//                 <th style={{ padding: '8px', border: '1px solid #ddd' }}>Status</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {Object.keys(attendance).map((date) => (
+//                 <tr key={date}>
+//                   <td style={{ padding: '8px', border: '1px solid #ddd' }}>
+//                     {new Date(date).getDate()} {/* Show day only */}
+//                   </td>
+//                   <td style={{ padding: '8px', border: '1px solid #ddd' }}>
+//                     {attendance[date]?.status || 'N/A'}
+//                   </td>
+//                 </tr>
+//               ))}
+//             </tbody>
+//           </table>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default StuAttendance;
