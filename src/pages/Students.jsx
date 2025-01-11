@@ -1,4 +1,4 @@
-//src/pages/Students.jsx
+// src/pages/Students.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -9,6 +9,9 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
 } from "@mui/material";
 import {
   AddCircleOutline as AddIcon,
@@ -31,12 +34,14 @@ const Students = () => {
     wrn: "",
     name: "",
     fathername: "",
+    email: "",
     gender: "",
     mobile: "",
     address: "",
   });
 
-  const API_URL = "https://college-fde10-default-rtdb.firebaseio.com/student_list.json";
+  const API_URL =
+    "https://college-fde10-default-rtdb.firebaseio.com/student_list.json";
 
   useEffect(() => {
     fetchStudents();
@@ -52,7 +57,7 @@ const Students = () => {
           ...data[key],
           id: key,
         }))
-        .sort((a, b) => parseInt(a.sr) - parseInt(b.sr));
+        .sort((a, b) => parseInt(a.sr || 0) - parseInt(b.sr || 0));
       setStudents(formattedData);
     } catch (error) {
       Swal.fire("Error", "Failed to fetch students", "error");
@@ -75,6 +80,7 @@ const Students = () => {
       wrn: "",
       name: "",
       fathername: "",
+      email: "",
       gender: "",
       mobile: "",
       address: "",
@@ -84,10 +90,16 @@ const Students = () => {
 
   const addStudent = async () => {
     try {
-      const maxSr = students.reduce((max, student) => Math.max(max, parseInt(student.sr) || 0), 0);
+      const maxSr = students.reduce(
+        (max, student) => Math.max(max, parseInt(student.sr) || 0),
+        0
+      );
       const newStudent = { ...studentForm, sr: maxSr + 1 };
       const response = await axios.post(API_URL, newStudent);
-      setStudents((prev) => [...prev, { ...newStudent, id: response.data.name }]);
+      setStudents((prev) => [
+        ...prev,
+        { ...newStudent, id: response.data.name },
+      ]);
       Swal.fire("Success", "Student added successfully", "success");
       setIsModalOpen(false);
     } catch (error) {
@@ -105,6 +117,7 @@ const Students = () => {
       wrn: student.wrn || "",
       name: student.name || "",
       fathername: student.fathername || "",
+      email: student.email || "",
       gender: student.gender || "",
       mobile: student.mobile || "",
       address: student.address || "",
@@ -115,10 +128,15 @@ const Students = () => {
   const updateStudent = async () => {
     try {
       const updatedStudent = { ...studentForm };
-      await axios.put(`${API_URL.replace(".json", `/${currentStudentId}.json`)}`, updatedStudent);
+      await axios.put(
+        `${API_URL.replace(".json", `/${currentStudentId}.json`)}`,
+        updatedStudent
+      );
       setStudents((prev) =>
         prev.map((student) =>
-          student.id === currentStudentId ? { ...updatedStudent, id: currentStudentId } : student
+          student.id === currentStudentId
+            ? { ...updatedStudent, id: currentStudentId }
+            : student
         )
       );
       Swal.fire("Success", "Student updated successfully", "success");
@@ -157,33 +175,57 @@ const Students = () => {
 
   const handlePrint = () => {
     const tableContent = document.querySelector(".students-container table").outerHTML;
-    const newWindow = window.open("", "Print", "width=800,height=600");
-    newWindow.document.write(`
+  
+    // Create a hidden iframe for printing
+    const printWindow = document.createElement("iframe");
+    printWindow.style.position = "absolute";
+    printWindow.style.top = "-10000px"; // Hide the iframe
+    document.body.appendChild(printWindow);
+  
+    const printDocument = printWindow.contentDocument || printWindow.contentWindow.document;
+    printDocument.open();
+    printDocument.write(`
+      <!DOCTYPE html>
       <html>
         <head>
-          <title>Print</title>
+          <title>Print Students List</title>
           <style>
             table {
               width: 100%;
               border-collapse: collapse;
             }
-            table, th, td {
-              border: 1px solid black;
-            }
             th, td {
+              border: 1px solid black;
               padding: 8px;
               text-align: left;
+            }
+            th {
+              background-color: #f2f2f2;
+            }
+            body {
+              font-family: Arial, sans-serif;
+              margin: 20px;
             }
           </style>
         </head>
         <body>
+          <h1>Students List</h1>
           ${tableContent}
         </body>
       </html>
     `);
-    newWindow.document.close();
-    newWindow.print();
+    printDocument.close();
+  
+    // Trigger print
+    printWindow.contentWindow.focus();
+    printWindow.contentWindow.print();
+  
+    // Clean up
+    setTimeout(() => document.body.removeChild(printWindow), 1000);
   };
+  
+  
+  
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -191,10 +233,14 @@ const Students = () => {
 
   return (
     <div className="students-container">
-      <Button onClick={handleAdd} startIcon={<AddIcon />}>Add Student</Button>
-      <Button onClick={handlePrint} startIcon={<PrintIcon />}>Print</Button>
+      <Button onClick={handleAdd} startIcon={<AddIcon />}>
+        Add Student
+      </Button>
+      <Button onClick={handlePrint} startIcon={<PrintIcon />}>
+        Print
+      </Button>
       <table>
-        <thead>
+      <thead>
           <tr>
             <th>SR</th>
             <th>EN</th>
@@ -202,6 +248,7 @@ const Students = () => {
             <th>WRN</th>
             <th>Name</th>
             <th>Father Name</th>
+            <th>Email</th>
             <th>Gender</th>
             <th>Mobile</th>
             <th>Address</th>
@@ -217,24 +264,30 @@ const Students = () => {
               <td data-label="WRN">{student.wrn}</td>
               <td data-label="Name">{student.name}</td>
               <td data-label="Father Name">{student.fathername}</td>
+              <td data-label="Email">{student.email}</td>
               <td data-label="Gender">{student.gender}</td>
               <td data-label="Mobile">{student.mobile}</td>
               <td data-label="Address">{student.address}</td>
               <td data-label="Actions">
-                <Button onClick={() => handleEdit(student)} startIcon={<EditIcon />}>
+                <Button
+                  onClick={() => handleEdit(student)}
+                  startIcon={<EditIcon />}
+                >
                   Edit
                 </Button>
-                <Button onClick={() => handleDelete(student.id)} startIcon={<DeleteIcon />}>
+                <Button
+                  onClick={() => handleDelete(student.id)}
+                  startIcon={<DeleteIcon />}
+                >
                   Delete
                 </Button>
               </td>
             </tr>
           ))}
         </tbody>
-
       </table>
       <Dialog open={isModalOpen} onClose={handleCloseModal}>
-        <DialogTitle>{isEditing ? "Edit Student" : "Add Student"}</DialogTitle>
+      <DialogTitle>{isEditing ? "Edit Student" : "Add Student"}</DialogTitle>
         <DialogContent>
           {Object.keys(studentForm).map((key) => (
             <TextField

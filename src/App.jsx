@@ -16,7 +16,7 @@ import ProfilePage from './pages/ProfilePage';
 
 // Lazy-loaded components
 const Attendance = lazy(() => import('./pages/Attendance'));
-// const StuAttendance = lazy(() => import('./pages/StuAttendance'));
+const StuAttendance = lazy(() => import('./pages/StuAttendance'));
 const Courses = lazy(() => import('./pages/Courses'));
 const Exams = lazy(() => import('./pages/Exams'));
 const Students = lazy(() => import('./pages/Students'));
@@ -109,8 +109,8 @@ const App = () => {
                         <Route path="/courses" element={<Courses />} />
                         <Route path="/exams" element={<Exams />} />
                         <Route path="/student1" element={<Student1 />} />
-                        <Route path="/attendance" element={<Attendance />} />
-                        {/* <Route path="/stuattendance" element={<StuAttendance />} /> */}
+                        {/* <Route path="/attendance" element={<Attendance />} /> */}
+                        <Route path="/stuattendance" element={<StuAttendance />} />
                         <Route path="/chat" element={<Chat />} />
                       </>
                     )}

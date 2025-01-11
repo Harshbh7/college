@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Snackbar,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
@@ -30,6 +31,7 @@ const Login = ({ onLogin, setUserData }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
   const [resetDialogOpen, setResetDialogOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const googleProvider = new GoogleAuthProvider();
 
@@ -44,7 +46,7 @@ const Login = ({ onLogin, setUserData }) => {
       setUserData(user); // Set user data (email, etc.) to be passed to ProfilePage
       navigate('/profile'); // Redirect to profile page
     } catch (error) {
-      alert('Invalid credentials. Please try again.');
+      setErrorMessage('Invalid credentials. Please try again.');
       console.error(error);
     }
   };
@@ -57,7 +59,7 @@ const Login = ({ onLogin, setUserData }) => {
       setUserData(user); // Set user data (email, etc.) to be passed to ProfilePage
       navigate('/profile'); // Redirect to profile page
     } catch (error) {
-      alert('Google sign-in failed. Please try again.');
+      setErrorMessage('Google sign-in failed. Please try again.');
       console.error(error);
     }
   };
@@ -68,7 +70,7 @@ const Login = ({ onLogin, setUserData }) => {
       alert('Password reset email sent! Check your inbox.');
       setResetDialogOpen(false);
     } catch (error) {
-      alert('Failed to send reset email. Please try again.');
+      setErrorMessage('Failed to send reset email. Please try again.');
       console.error(error);
     }
   };
@@ -176,6 +178,14 @@ const Login = ({ onLogin, setUserData }) => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Error Snackbar */}
+      <Snackbar
+        open={!!errorMessage}
+        autoHideDuration={6000}
+        onClose={() => setErrorMessage('')}
+        message={errorMessage}
+      />
     </Grid>
   );
 };

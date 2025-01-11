@@ -19,7 +19,7 @@ const ProfilePage = () => {
           if (user) {
             // Fetch user data from the database if user is logged in
             const response = await axios.get(
-              `https://college-fde10-default-rtdb.firebaseio.com/student_data.json`
+              `https://college-fde10-default-rtdb.firebaseio.com/student_list.json`
             );
             const studentsData = response.data;
 

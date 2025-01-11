@@ -19,7 +19,7 @@ const Sidebar = ({ role }) => {
     { text: 'Courses', path: '/courses' },
     { text: 'Exams', path: '/exams' },
     { text: 'Students', path: role === 'admin' ? '/students' : '/student1' },
-    { text: 'Attendance', path: '/attendance' },
+    { text: 'Attendance', path: role === 'admin' ? '/attendance' : '/stuAttendance' },
     { text: 'Chat', path: '/chat' },
   ];
 
