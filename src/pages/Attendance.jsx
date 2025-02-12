@@ -539,8 +539,8 @@ function getTargetLocation() {
   const userAgent = navigator.userAgent.toLowerCase();
   if (userAgent.includes('chrome')) {
     return {
-      latitude:  27.1407174,
-      longitude: 78.0309542,
+      latitude:  27.1766701,
+      longitude: 78.0080745
     };
   } else if (userAgent.includes('edge')) {
     return {
@@ -555,7 +555,7 @@ function getTargetLocation() {
 }
 
 const targetLocation = getTargetLocation();
-const maxDistance = 50; // in meters (50 meters)
+const maxDistance = 5000; // in meters (50 meters)
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371000; // Earth radius in meters

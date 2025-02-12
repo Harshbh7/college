@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   IconButton,
@@ -8,10 +8,46 @@ import {
   MenuItem,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { auth, database } from '../firebaseConfig';
+import { ref, onValue } from 'firebase/database';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const Header = ({ onLogout }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          try {
+            const dbRef = ref(database, "student_list");
+            
+            // Listen for real-time changes instead of fetching once
+            onValue(dbRef, (snapshot) => {
+              if (snapshot.exists()) {
+                const studentsData = snapshot.val();
+                const loggedInUserEmail = user.email;
+                const studentKey = Object.keys(studentsData).find(
+                  (key) => studentsData[key].email === loggedInUserEmail
+                );
+
+                if (studentKey) {
+                  const userProfile = studentsData[studentKey];
+                  setProfileImage(userProfile.photoUrl || "/profile.jpg");
+                }
+              }
+            });
+          } catch (error) {
+            console.error("Error fetching profile image:", error);
+          }
+        }
+      });
+    };
+
+    fetchProfileImage();
+  }, []);
 
   const handleAvatarClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -49,14 +85,14 @@ const Header = ({ onLogout }) => {
         <IconButton
           onClick={handleAvatarClick}
           sx={{
-            marginLeft: 'auto', // Pushes avatar to the right side
+            marginLeft: 'auto',
             marginRight: {
-              xs: '0%', // For mobile screens (extra small, up to 600px)
-              sm: '18%', // For larger screens (tablet and desktop)
+              xs: '0%',
+              sm: '18%',
             },
           }}
         >
-          <Avatar alt="Profile" src="/profile.jpg" />
+          <Avatar alt="Profile" src={profileImage} />
         </IconButton>
       </Tooltip>
 
