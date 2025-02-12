@@ -72,7 +72,7 @@ This all-in-one digital platform empowers students and teachers with seamless co
 ## 📸 Screenshots
 
 ### 📌 Sidebar Screenshots
-![Dashboard](./screenshots/dashboard.png)
+![Dashboard](./Frontened/src/assets/screenshots/dashboard.png)
 ![Courses](./screenshots/courses.png)
 ![Exam](./screenshots/exam.png)
 ![Students](./screenshots/students.png)
@@ -88,7 +88,6 @@ This all-in-one digital platform empowers students and teachers with seamless co
 ![Login](./screenshots/login.png)
 ![Signup](./screenshots/signup.png)
 
-(Add your screenshots in the `screenshots` folder and update the paths accordingly.)
 
 ## 📜 License
 
@@ -96,9 +95,7 @@ This project is licensed under the MIT License.
 
 ## 👥 Contributors
 
-- [Your Name] (Developer)
+- HARSH SHARMA (WEB Developer)
 
----
 
-Let me know if you need further refinements! 🚀
 
