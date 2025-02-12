@@ -73,20 +73,20 @@ This all-in-one digital platform empowers students and teachers with seamless co
 
 ### 📌 Sidebar Screenshots
 ![Dashboard](./Frontened/src/assets/screenshots/dashboard.png)
-![Courses](./screenshots/courses.png)
-![Exam](./screenshots/exam.png)
-![Students](./screenshots/students.png)
-![Attendance](./screenshots/attendance.png)
-![Chat](./screenshots/chat.png)
+![Courses](./Frontened/src/assets/screenshots/courses.png)
+![Exam](./Frontened/src/assets/screenshots/exam.png)
+![Students](./Frontened/src/assets/screenshots/students.png)
+![Attendance](./Frontened/src/assets/screenshots/attendance.png)
+![Chat](./Frontened/src/assets/screenshots/chat.png)
 
 ### 🔍 Navbar Screenshots
-![View Profile](./screenshots/view-profile.png)
-![Settings](./screenshots/settings.png)
-![Logout](./screenshots/logout.png)
+![View Profile](./Frontened/src/assets/screenshots/view-profile.png)
+![Settings](./Frontened/src/assets/screenshots/settings.png)
+![Logout](./Frontened/src/assets/screenshots/logout.png)
 
 ### 🔑 Authentication Screenshots
-![Login](./screenshots/login.png)
-![Signup](./screenshots/signup.png)
+![Login](./Frontened/src/assets/screenshots/login.png)
+![Signup](./Frontened/src/assets/screenshots/signup.png)
 
 
 ## 📜 License
