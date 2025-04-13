@@ -1,0 +1,94 @@
+/* src/styles/Student1.css */
+.student1-container {
+  padding: 20px;
+  max-width: 100%;
+  overflow-x: auto;
+  background: linear-gradient(135deg, #f0f4f8, #dfe7fd);
+  min-height: 100vh;
+}
+
+/* Header Styling */
+.custom-header {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.header-title {
+  color: white;
+  font-weight: bold;
+  flex-grow: 1;
+  text-align: center;
+}
+
+/* Title */
+.title {
+  margin: 20px 0;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Table Styling */
+.table-container {
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.table-header {
+  background: #007bff !important;
+  color: white !important;
+  text-transform: uppercase;
+  font-size: 16px;
+}
+
+.table-header th {
+  color: white;
+  font-weight: bold;
+  padding: 14px;
+}
+
+.table-row {
+  transition: 0.3s ease-in-out;
+}
+
+.table-row:hover {
+  background-color: #f1f1f1;
+  transition: 0.3s;
+}
+
+/* Mobile View (Key-Value Format) */
+.mobile-card-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 10px;
+}
+
+.student-card {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.student-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.student-title {
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.student-info p {
+  margin: 5px 0;
+  font-size: 15px;
+  color: #444;
+}
+
+.student-info strong {
+  color: #007bff;
+}

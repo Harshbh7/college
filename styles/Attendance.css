@@ -1,0 +1,59 @@
+/* src/styles/Attendance.css */
+.table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+    color: #3f51b5;
+  }
+  
+  td {
+    background-color: #fff;
+  }
+  
+  button {
+    margin-right: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  /* Style the buttons */
+  button.present {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  button.absent {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  /* Responsive design for smaller screens */
+  @media (max-width: 768px) {
+    table {
+      font-size: 12px;
+    }
+  
+    .MuiFormControl-root {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  
+    .MuiButton-root {
+      font-size: 12px;
+    }
+  }
+  

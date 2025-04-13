@@ -13,6 +13,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebaseConfig';
 import Sidebar from './components/Sidebar';
 import ProfilePage from './pages/ProfilePage';
+import ACALogo from './assets/ACALogo.png';
 
 // Lazy-loaded components
 const Attendance = lazy(() => import('./pages/Attendance'));
@@ -26,6 +27,32 @@ const Chat = lazy(() => import('./pages/Chat'));
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [role, setRole] = useState(null);
+  const [isPWA, setIsPWA] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); 
+
+  useEffect(() => {
+    if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) {
+      setIsPWA(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("../dist/service-worker").then(() => {
+          console.log("Service Worker Registered");
+        });
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    const splashTimeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 5000); 
+
+    return () => clearTimeout(splashTimeout);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -50,8 +77,23 @@ const App = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <Box sx={{
+        height: '100vh',
+        width: '100vw',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+      }}>
+        <img src={ACALogo} alt="Loading..." style={{ width: 200, height: 200 }} />
+      </Box>
+    );
+  }
+
   return (
-    <BrowserRouter basename="/<college>">
+    <Router>
       <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
         <CssBaseline />
         {isAuthenticated && <Sidebar role={role} />}
@@ -76,11 +118,17 @@ const App = () => {
                           path="/"
                           element={
                             <>
-                              <DashboardCards />
+                              <DashboardCards role={role} />
                               <WeeklySchedule />
-                              <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
-                                <Calendar />
-                                <UpcomingEvents />
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  flexDirection: { xs: 'column', md: 'row' },
+                                  gap: 2,
+                                }}
+                              >
+                                <Calendar sx={{ flex: 1 }} />
+                                <UpcomingEvents sx={{ flex: 1 }} />
                               </Box>
                             </>
                           }
@@ -97,11 +145,18 @@ const App = () => {
                           path="/"
                           element={
                             <>
-                              <DashboardCards />
+                              <DashboardCards role={role} />
                               <WeeklySchedule />
-                              <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
-                                <Calendar />
-                                <UpcomingEvents />
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  flexDirection: { xs: 'column', sm: 'row' },
+                                  gap: 2,
+                                  mt: 3,
+                                }}
+                              >
+                                <Calendar sx={{ flex: 1 }} />
+                                <UpcomingEvents sx={{ flex: 1 }} />
                               </Box>
                             </>
                           }
@@ -109,7 +164,6 @@ const App = () => {
                         <Route path="/courses" element={<Courses />} />
                         <Route path="/exams" element={<Exams />} />
                         <Route path="/student1" element={<Student1 />} />
-                        {/* <Route path="/attendance" element={<Attendance />} /> */}
                         <Route path="/stuattendance" element={<StuAttendance />} />
                         <Route path="/chat" element={<Chat />} />
                       </>
@@ -129,7 +183,7 @@ const App = () => {
           </Box>
         </Box>
       </Box>
-    </BrowserRouter>
+    </Router>
   );
 };
 
