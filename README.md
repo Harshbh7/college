@@ -109,7 +109,7 @@ This all-in-one digital platform empowers students and teachers with seamless co
 ![Students Admin View](./src/assets/screenshots/studentsadmin.png)
 
 #### 🗓️ Attendance Admin View
-![Attendance Admin View](./src/assets/screenshots/attendanceadmin.jpg)
+![Attendance Admin View](./src/assets/screenshots/attendanceadmin.png)
 
 #### 💬 Chat View
 ![Chat View](./src/assets/screenshots/chat.png)
