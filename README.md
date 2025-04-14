@@ -1,6 +1,5 @@
-Here’s the final **enhanced and professional `README.md`** with a polished contributor section including your email and LinkedIn, plus some stylistic upgrades for maximum impact:
+**Live Preview:** [Preview 1](https://hackerhub.club), [Preview 2](https://college-lemon.vercel.app/)
 
----
 
 ```markdown
 # 🎓 School Management & Communication System
