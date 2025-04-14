@@ -76,8 +76,11 @@ This all-in-one digital platform empowers students and teachers with seamless co
 
 ### 📌 Sidebar Screenshots
 
-#### 🧭 Dashboard
-![Dashboard](./src/assets/screenshots/dashboard.png)
+#### 📊 Dashboard View 1
+![Dashboard View 1](./src/assets/screenshots/dashboard1.png)
+
+#### 📊 Dashboard View 2
+![Dashboard View 2](./src/assets/screenshots/dashboard2.png)
 
 #### 📚 Courses
 ![Courses](./src/assets/screenshots/courses.png)
