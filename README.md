@@ -91,38 +91,55 @@ npm run deploy
 
 ## 📸 Screenshots
 
-### 🔷 Dashboard & Navigation
+### 🎓 Student View
 
-#### 📊 Dashboard Overview
-![Dashboard](./src/assets/screenshots/dashboard1.png)
+#### 📊 Dashboard - View 1
+![Dashboard 1](./src/assets/screenshots/dashboard1.png)
 
-#### 📚 Courses
+#### 📊 Dashboard - View 2
+![Dashboard 2](./src/assets/screenshots/dashboard2.png)
+
+#### 📚 Courses Page
 ![Courses](./src/assets/screenshots/courses.png)
 
-#### 📝 Exams
-![Exams](./src/assets/screenshots/exam.png)
+#### 📝 Exam Page
+![Exam](./src/assets/screenshots/exam.png)
 
-#### 🎓 Students
+#### 🎓 Students Page
 ![Students](./src/assets/screenshots/students.png)
 
-#### 📅 Attendance
+#### 📅 Attendance Page
 ![Attendance](./src/assets/screenshots/attendance.png)
 
-#### 💬 Chat
+#### 💬 Chat Page
 ![Chat](./src/assets/screenshots/chat.png)
 
 ---
 
-### 🧑‍💼 Admin Panel Views
+### 🧑‍💼 Admin View
 
-#### 🧑‍🏫 Students Admin
+#### 📊 Dashboard - View 1
+![Dashboard 1](./src/assets/screenshots/dashboard1.png)
+
+#### 📊 Dashboard - View 2
+![Dashboard 2](./src/assets/screenshots/dashboard2.png)
+
+#### 📚 Courses Page
+![Courses](./src/assets/screenshots/courses.png)
+
+#### 📝 Exam Page
+![Exam](./src/assets/screenshots/exam.png)
+
+#### 🎓 Students (Admin View)
 ![Students Admin](./src/assets/screenshots/studentsadmin.png)
 
-#### 🗓️ Attendance Admin
+#### 📅 Attendance (Admin View)
 ![Attendance Admin](./src/assets/screenshots/attendanceadmin.png)
 
----
+#### 💬 Chat Page
+![Chat](./src/assets/screenshots/chat.png)
 
+---
 ### 🧭 Navbar & Profile
 
 #### 👤 View Profile
