@@ -60,8 +60,8 @@ Empowering educators and students with:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-repository-url.git
-cd your-project-folder
+git clone https://github.com/Harshbh7/college.git
+cd college
 
 # 2. Install dependencies
 npm install
