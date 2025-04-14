@@ -81,12 +81,12 @@ This all-in-one digital platform empowers students and teachers with seamless co
 
 ### 🔍 Navbar Screenshots
 ![View Profile](./src/assets/screenshots/view-profile.png)
-![Settings](./src/assets/screenshots/settings.png)
-![Logout](./src/assets/screenshots/logout.png)
+
 
 ### 🔑 Authentication Screenshots
 ![Login](./src/assets/screenshots/login.png)
 ![Signup](./src/assets/screenshots/signup.png)
+
 
 
 ## 📜 License
