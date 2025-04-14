@@ -170,15 +170,4 @@ This project is licensed under the [MIT License](LICENSE).
 🎓 Full Stack Developer  
 📧 Email: [harshbh20102@gmail.com](mailto:harshbh20102@gmail.com)  
 🔗 LinkedIn: [linkedin.com/in/harshbh7](https://www.linkedin.com/in/harshbh7)  
-🌐 Portfolio: [https://your-portfolio.com](https://your-portfolio.com)  
 
----
-
-```
-
-Would you like me to also:
-- Add collapsible `<details>` for screenshots or tech stack?
-- Include a GitHub profile summary section with stats or trophies?
-- Add dark/light theme toggle preview for screenshots?
-
-Let me know and I’ll upgrade it right away!
