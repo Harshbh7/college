@@ -1,3 +1,6 @@
+Here’s your updated `README.md` with the new images (`attendanceadmin.jpg`, `chat.png`, `dashboard1.png`, `dashboard2.png`, `studentsadmin.png`) included in the **📸 Screenshots** section:
+
+```markdown
 # 🎓 School Management & Communication System
 
 ## 🚀 Overview
@@ -79,15 +82,19 @@ This all-in-one digital platform empowers students and teachers with seamless co
 ![Attendance](./src/assets/screenshots/attendance.png)
 ![Chat](./src/assets/screenshots/chat.png)
 
+### 🖼️ Admin Panel Views
+![Dashboard View 1](./src/assets/screenshots/dashboard1.png)
+![Dashboard View 2](./src/assets/screenshots/dashboard2.png)
+![Students Admin View](./src/assets/screenshots/studentsadmin.png)
+![Attendance Admin View](./src/assets/screenshots/attendanceadmin.jpg)
+![Chat View](./src/assets/screenshots/chat.png)
+
 ### 🔍 Navbar Screenshots
 ![View Profile](./src/assets/screenshots/view-profile.png)
-
 
 ### 🔑 Authentication Screenshots
 ![Login](./src/assets/screenshots/login.png)
 ![Signup](./src/assets/screenshots/signup.png)
-
-
 
 ## 📜 License
 
@@ -95,4 +102,5 @@ This project is licensed under the MIT License.
 
 ## 👥 Contributors
 
-- HARSH SHARMA (WEB Developer)
+- **HARSH SHARMA** – Web Developer
+```
