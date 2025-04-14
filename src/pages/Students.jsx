@@ -12,6 +12,12 @@ import {
   RadioGroup,
   Radio,
   FormControlLabel,
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
 import {
   AddCircleOutline as AddIcon,
@@ -40,8 +46,9 @@ const Students = () => {
     address: "",
   });
 
-  const API_URL =
-    "https://college-fde10-default-rtdb.firebaseio.com/student_list.json";
+  const DATABASE_URL = import.meta.env.VITE_FIREBASE_DATABASE_URL;
+
+  const API_URL = `${DATABASE_URL}/student_list.json`;
 
   useEffect(() => {
     fetchStudents();
@@ -174,58 +181,12 @@ const Students = () => {
   };
 
   const handlePrint = () => {
-    const tableContent = document.querySelector(".students-container table").outerHTML;
-  
-    // Create a hidden iframe for printing
-    const printWindow = document.createElement("iframe");
-    printWindow.style.position = "absolute";
-    printWindow.style.top = "-10000px"; // Hide the iframe
-    document.body.appendChild(printWindow);
-  
-    const printDocument = printWindow.contentDocument || printWindow.contentWindow.document;
-    printDocument.open();
-    printDocument.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Print Students List</title>
-          <style>
-            table {
-              width: 100%;
-              border-collapse: collapse;
-            }
-            th, td {
-              border: 1px solid black;
-              padding: 8px;
-              text-align: left;
-            }
-            th {
-              background-color: #f2f2f2;
-            }
-            body {
-              font-family: Arial, sans-serif;
-              margin: 20px;
-            }
-          </style>
-        </head>
-        <body>
-          <h1>Students List</h1>
-          ${tableContent}
-        </body>
-      </html>
-    `);
-    printDocument.close();
-  
-    // Trigger print
-    printWindow.contentWindow.focus();
-    printWindow.contentWindow.print();
-  
-    // Clean up
-    setTimeout(() => document.body.removeChild(printWindow), 1000);
+    const tableContent = document.querySelector(".students-container table")
+      .outerHTML;
+    const newWindow = window.open("", "Print", "width=800,height=600");
+    newWindow.document.write(`...`);
+    newWindow.print();
   };
-  
-  
-  
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -233,14 +194,38 @@ const Students = () => {
 
   return (
     <div className="students-container">
-      <Button onClick={handleAdd} startIcon={<AddIcon />}>
+  <Typography variant="h4" gutterBottom color="primary">
+    Student Management
+  </Typography>
+
+  <Grid container spacing={2} marginBottom={2}>
+    <Grid item>
+      <Button
+        variant="contained"
+        color="success"
+        startIcon={<AddIcon />}
+        onClick={handleAdd}
+      >
         Add Student
       </Button>
-      <Button onClick={handlePrint} startIcon={<PrintIcon />}>
+    </Grid>
+    <Grid item>
+      <Button
+        variant="outlined"
+        color="secondary"
+        startIcon={<PrintIcon />}
+        onClick={handlePrint}
+      >
         Print
       </Button>
-      <table>
-      <thead>
+    </Grid>
+  </Grid>
+
+  <Card elevation={3}>
+    <CardContent>
+    <div className="table-wrapper">
+      <table className="students-table">
+        <thead>
           <tr>
             <th>SR</th>
             <th>EN</th>
@@ -269,47 +254,55 @@ const Students = () => {
               <td data-label="Mobile">{student.mobile}</td>
               <td data-label="Address">{student.address}</td>
               <td data-label="Actions">
-                <Button
-                  onClick={() => handleEdit(student)}
-                  startIcon={<EditIcon />}
-                >
-                  Edit
-                </Button>
-                <Button
-                  onClick={() => handleDelete(student.id)}
-                  startIcon={<DeleteIcon />}
-                >
-                  Delete
-                </Button>
+                <Tooltip title="Edit">
+                  <IconButton color="primary" onClick={() => handleEdit(student)}>
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Delete">
+                  <IconButton color="error" onClick={() => handleDelete(student.id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <Dialog open={isModalOpen} onClose={handleCloseModal}>
-      <DialogTitle>{isEditing ? "Edit Student" : "Add Student"}</DialogTitle>
-        <DialogContent>
-          {Object.keys(studentForm).map((key) => (
+    </div>
+    </CardContent>
+  </Card>
+
+  <Dialog open={isModalOpen} onClose={handleCloseModal} fullWidth maxWidth="sm">
+    <DialogTitle>{isEditing ? "Edit Student" : "Add Student"}</DialogTitle>
+    <DialogContent dividers>
+      <Grid container spacing={2}>
+        {Object.keys(studentForm).map((key) => (
+          <Grid item xs={12} sm={6} key={key}>
             <TextField
-              key={key}
               name={key}
               label={key.toUpperCase()}
               value={studentForm[key]}
               onChange={handleInputChange}
               fullWidth
               margin="dense"
-              disabled={key === "sr"} // Disable editing for "sr"
+              disabled={key === "sr"}
             />
-          ))}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModal}>Cancel</Button>
-          <Button onClick={isEditing ? updateStudent : addStudent}>
-            {isEditing ? "Update" : "Add"}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+          </Grid>
+        ))}
+      </Grid>
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={handleCloseModal} color="secondary">
+        Cancel
+      </Button>
+      <Button onClick={isEditing ? updateStudent : addStudent} variant="contained" color="primary">
+        {isEditing ? "Update" : "Add"}
+      </Button>
+    </DialogActions>
+  </Dialog>
+</div>
+
   );
 };
 

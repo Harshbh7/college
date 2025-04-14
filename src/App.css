@@ -1,42 +1,127 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
+/* src/app.css */
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+/* General styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    overflow-x: hidden;
   }
-  to {
-    transform: rotate(360deg);
+  
+  /* Sidebar */
+  .sidebar {
+    width: 250px;
+    transition: transform 0.3s ease-in-out;
   }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: -100%;
+      height: 100vh;
+      background-color: #fff;
+      z-index: 1000;
+      box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease-in-out;
+    }
+  
+    .sidebar.open {
+      transform: translateX(0);
+    }
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
+  
+  /* Content area */
+  .content {
+    flex-grow: 1;
+    padding: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    .content {
+      padding: 10px;
+    }
+  }
+  
+  /* Header */
+  .header {
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    background-color: #1976d2;
+    color: white;
+  }
+  
+  @media (max-width: 768px) {
+    .header {
+      padding: 0 10px;
+    }
+  }
+  
+  /* Dashboard Cards */
+  .dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  @media (max-width: 480px) {
+    .dashboard-cards {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+  }
+  
+  /* Weekly Schedule */
+  .weekly-schedule {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  @media (max-width: 768px) {
+    .weekly-schedule {
+      flex-direction: column;
+    }
+  }
+  
+  /* Calendar & Upcoming Events */
+  .calendar-upcoming {
+    display: flex;
+    gap: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    .calendar-upcoming {
+      flex-direction: column;
+    }
+  }
+  
+  /* Chat */
+  .chat-container {
+    height: 500px;
+    overflow-y: auto;
+  }
+  
+  @media (max-width: 480px) {
+    .chat-container {
+      height: 300px;
+    }
+  }
+  
+  /* Forms */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  @media (max-width: 480px) {
+    form {
+      gap: 10px;
+    }
+  }
+  

@@ -1,6 +1,4 @@
-/* Custom Styles for Attendance Component */
-
-/* Style the table for better visuals */
+/* src/styles/Attendance.css */
 .table-container {
     overflow-x: auto;
     margin-top: 20px;

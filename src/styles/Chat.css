@@ -1,0 +1,8 @@
+/* src/styles/Chat.css */
+@media (max-width: 425px) {
+    .emoji-picker-container, 
+    .emoji-icon-button { /* Replace with your emoji icon class */
+      display: none !important;
+    }
+  }
+  
