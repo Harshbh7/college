@@ -95,22 +95,50 @@ const Login = ({ onLogin, setUserData }) => {
 
   const handleGoogleSignIn = async () => {
     try {
-      const userCredential = await signInWithPopup(auth, googleProvider);
-      const user = userCredential.user;
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' }); // Force account selection
+  
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+  
+      // Optional: Extract token and other info
+      // const credential = GoogleAuthProvider.credentialFromResult(result);
+      // const token = credential.accessToken;
+  
       onLogin();
       setUserData(user);
       localStorage.removeItem('loginAttempts');
-      navigate('/');
+  
+      Swal.fire({
+        icon: 'success',
+        title: `Welcome, ${user.displayName || user.email.split('@')[0]}!`,
+        text: 'You have successfully signed in with Google.',
+      }).then(() => {
+        navigate('/');
+      });
+  
     } catch (error) {
+      console.error("Google Sign-In Error:", error.code, error.message);
+  
+      let errorMessage = 'Google Sign-In failed.';
+  
+      if (error.code === 'auth/popup-closed-by-user') {
+        errorMessage = 'Popup closed before completing the sign-in.';
+      } else if (error.code === 'auth/cancelled-popup-request') {
+        errorMessage = 'Cancelled popup request. Try again.';
+      } else if (error.code === 'auth/network-request-failed') {
+        errorMessage = 'Network error. Please check your connection.';
+      }
+  
       Swal.fire({
         icon: 'error',
         title: 'Google Sign-In Failed',
-        text: 'Please try again.',
+        text: errorMessage,
         confirmButtonColor: '#d33',
       });
-      console.error(error);
     }
   };
+  
 
   const handleForgotPassword = async () => {
     try {
@@ -130,7 +158,7 @@ const Login = ({ onLogin, setUserData }) => {
         confirmButtonColor: '#d33',
       });
       console.error(error);
-    }
+    } 
   };
 
   return (

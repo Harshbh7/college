@@ -22,6 +22,7 @@ import Swal from "sweetalert2";
 const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+const DATABASE_URL = import.meta.env.VITE_FIREBASE_DATABASE_URL;
 
 const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -35,7 +36,7 @@ const ProfilePage = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
-          const response = await axios.get(`https://college-fde10-default-rtdb.firebaseio.com/student_list.json`);
+          const response = await axios.get(`${DATABASE_URL}student_list.json`);
           const studentsData = response.data;
 
           const loggedInUserEmail = user.email;
@@ -96,7 +97,7 @@ const ProfilePage = () => {
 
     try {
       await axios.put(
-        `https://college-fde10-default-rtdb.firebaseio.com/student_list/${userProfile.id}.json`,
+        `${DATABASE_URL}student_list/${userProfile.id}.json`,
         updatedProfile
       );
       setUserProfile(updatedProfile);

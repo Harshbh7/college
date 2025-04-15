@@ -58,16 +58,18 @@ const Signup = () => {
       // Write user data to Firebase Realtime Database
       await set(ref(db, 'student_list/' + userId), {
         name: `${firstName} ${lastName}`,
-        fathername: fatherName,  // Added father name
-        mothername: motherName,  // Added mother name
+        fathername: fatherName,
+        mothername: motherName,
         mobile: mobile,
         email: email,
-        sr: sr,  // Assign the incremented 'sr'
+        sr: sr,
         dob: dob,
+        gender: gender,  // <-- add this
         address: address,
         wrn: wrn,
         en: enrollmentNo,
       });
+      
 
       // Update the 'sr' counter in Firebase
       await update(ref(db, 'student_list'), {
