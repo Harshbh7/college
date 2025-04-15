@@ -36,7 +36,7 @@ const ProfilePage = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
-          const response = await axios.get(`${DATABASE_URL}student_list.json`);
+          const response = await axios.get(`https://college-fde10-default-rtdb.firebaseio.com/student_list.json`);
           const studentsData = response.data;
 
           const loggedInUserEmail = user.email;
@@ -97,7 +97,7 @@ const ProfilePage = () => {
 
     try {
       await axios.put(
-        `${DATABASE_URL}student_list/${userProfile.id}.json`,
+        `https://college-fde10-default-rtdb.firebaseio.com/student_list/${userProfile.id}.json`,
         updatedProfile
       );
       setUserProfile(updatedProfile);
