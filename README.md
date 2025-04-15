@@ -1,172 +1,106 @@
-**Live Preview:** [Preview 1](https://hackerhub.club), [Preview 2](https://college-lemon.vercel.app/)
-
+Here’s your updated `README.md` with the new images (`attendanceadmin.jpg`, `chat.png`, `dashboard1.png`, `dashboard2.png`, `studentsadmin.png`) included in the **📸 Screenshots** section:
 
 ```markdown
 # 🎓 School Management & Communication System
 
-An all-in-one digital platform designed to streamline communication, attendance tracking, and academic management for schools. Built with modern web technologies, it offers real-time features and a Progressive Web App (PWA) experience.
-
----
-
 ## 🚀 Overview
 
-Empowering educators and students with:
+This all-in-one digital platform empowers students and teachers with seamless communication, smart attendance tracking, and effortless document sharing. Designed for a modern learning experience, it integrates real-time chat, academic management, and PWA support for accessibility across devices.
 
-- 🔹 Real-time chat for seamless communication  
-- 🔹 Smart, location-aware attendance system  
-- 🔹 Secure document sharing (images, videos, PDFs)  
-- 🔹 Academic tools: syllabus, timetables, results  
-- 🔹 PWA capabilities for native-like performance  
-- 🔹 Clean, intuitive dashboard and navigation
+## ✨ Key Features
 
----
+- **💬 Real-Time Chat**: Instant student-teacher messaging for improved collaboration.
+- **📊 Smart Attendance System**:
+  - Teachers can mark attendance for all students.
+  - Students can only mark attendance during class hours and within a 50m radius of the classroom.
+- **📂 Document Sharing**: Effortlessly share images, videos, PDFs, and essential study materials.
+- **📖 Academic Tools**:
+  - Share syllabus, timetables, exam schedules, and results.
+  - Access student profiles with detailed information.
+- **📱 Progressive Web App (PWA)**: Install and use the app like a native mobile application.
+- **🗂 Intuitive Navigation**:
+  - 📌 Dashboard
+  - 📚 Courses
+  - 📝 Exams
+  - 🎓 Students
+  - 📅 Attendance
+  - 💬 Chat
+- **👤 Profile Options**:
+  - 🔍 View Profile
+  - ⚙️ Settings
+  - 🚪 Logout
 
-## ✨ Features
+## 🛠 Technologies Used
 
-### 💬 Real-Time Communication
-- One-on-one or group messaging using Socket.IO
-
-### 📍 Smart Attendance System
-- Teachers mark attendance for the entire class
-- Students mark attendance only during class hours and within a 50m radius
-
-### 📂 File & Media Sharing
-- Upload images, videos, and PDFs for classes and exams
-
-### 📖 Academic Management
-- Manage students, courses, exam schedules, and results
-
-### 📱 PWA Support
-- Installable app experience on any device
-
-### 🧭 Intuitive UI Navigation
-- Dashboard, Courses, Exams, Students, Attendance, Chat, and more
-
----
-
-## 🛠 Tech Stack
-
-| Frontend         | Backend             | Features              |
-|------------------|---------------------|------------------------|
-| React + Vite     | Firebase (Auth, DB) | Socket.IO (chat)       |
-| Material UI      | Cloudinary (uploads)| Axios (HTTP)          |
-| SweetAlert2      | Realtime DB         | XLSX (exports)        |
-| React PDF Viewer |                     | Vite PWA Plugin       |
-
----
+- **🌐 Frontend**: React, Vite, Material UI, SweetAlert2
+- **🔥 Backend**: Firebase, Cloudinary, Socket.IO
+- **⚡ Real-time Communication**: Socket.IO
+- **☁️ File Management**: Cloudinary, Axios
+- **📜 PDF Viewing**: React PDF Viewer
+- **📊 Data Handling**: XLSX
+- **🔗 PWA Support**: Vite PWA Plugin
 
 ## 🔧 Installation
 
-```bash
-# 1. Clone the repository
-git clone https://github.com/Harshbh7/college.git
-cd college
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-repository-url.git
+   cd your-project-folder
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+4. Build for production:
+   ```bash
+   npm run build
+   ```
+5. Deploy the project:
+   ```bash
+   npm run deploy
+   ```
 
-# 2. Install dependencies
-npm install
+## 🎯 How to Use
 
-# 3. Run development server
-npm run dev
-
-# 4. Build for production
-npm run build
-
-# 5. Deploy
-npm run deploy
-```
-
----
-
-## 🎯 Usage Guide
-
-- 🔐 **Login / Signup**: Secure role-based access
-- 🗂 **Manage Students & Courses**: Add, edit, and view student data
-- 📍 **Attendance**: Teachers mark and monitor attendance; students mark using geolocation
-- 📂 **Document Sharing**: Upload study materials, PDFs, and results
-- 💬 **Chat System**: Real-time communication for quick updates
-- 📱 **PWA Install**: Add to home screen on mobile devices
-
----
+- **🔑 Login**: Secure authentication for students and teachers.
+- **💬 Chat**: Communicate instantly via real-time messaging.
+- **📍 Attendance**: Smart location-based student attendance marking.
+- **📂 File Sharing**: Teachers upload and distribute essential documents.
+- **📱 PWA Installation**: Install the app for a seamless mobile-friendly experience.
 
 ## 📸 Screenshots
 
-### 🎓 Student View
-
-#### 📊 Dashboard - View 1
-![Dashboard 1](./src/assets/screenshots/dashboard1.png)
-
-#### 📊 Dashboard - View 2
-![Dashboard 2](./src/assets/screenshots/dashboard2.png)
-
-#### 📚 Courses Page
+### 📌 Sidebar Screenshots
+![Dashboard](./src/assets/screenshots/dashboard.png)
 ![Courses](./src/assets/screenshots/courses.png)
-
-#### 📝 Exam Page
 ![Exam](./src/assets/screenshots/exam.png)
-
-#### 🎓 Students Page
 ![Students](./src/assets/screenshots/students.png)
-
-#### 📅 Attendance Page
 ![Attendance](./src/assets/screenshots/attendance.png)
-
-#### 💬 Chat Page
 ![Chat](./src/assets/screenshots/chat.png)
 
----
+### 🖼️ Admin Panel Views
+![Dashboard View 1](./src/assets/screenshots/dashboard1.png)
+![Dashboard View 2](./src/assets/screenshots/dashboard2.png)
+![Students Admin View](./src/assets/screenshots/studentsadmin.png)
+![Attendance Admin View](./src/assets/screenshots/attendanceadmin.jpg)
+![Chat View](./src/assets/screenshots/chat.png)
 
-### 🧑‍💼 Admin View
-
-#### 📊 Dashboard - View 1
-![Dashboard 1](./src/assets/screenshots/dashboard1.png)
-
-#### 📊 Dashboard - View 2
-![Dashboard 2](./src/assets/screenshots/dashboard2.png)
-
-#### 📚 Courses Page
-![Courses](./src/assets/screenshots/courses.png)
-
-#### 📝 Exam Page
-![Exam](./src/assets/screenshots/exam.png)
-
-#### 🎓 Students (Admin View)
-![Students Admin](./src/assets/screenshots/studentsadmin.png)
-
-#### 📅 Attendance (Admin View)
-![Attendance Admin](./src/assets/screenshots/attendanceadmin.png)
-
-#### 💬 Chat Page
-![Chat](./src/assets/screenshots/chat.png)
-
----
-
-### 🧭 Navbar & Profile
-
-#### 👤 View Profile
+### 🔍 Navbar Screenshots
 ![View Profile](./src/assets/screenshots/view-profile.png)
 
----
-
-### 🔐 Authentication
-
-#### 🔓 Login
+### 🔑 Authentication Screenshots
 ![Login](./src/assets/screenshots/login.png)
-
-#### 📝 Signup
 ![Signup](./src/assets/screenshots/signup.png)
-
----
 
 ## 📜 License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the MIT License.
 
----
+## 👥 Contributors
 
-## 👤 Contributor
-
-**Harsh Sharma**  
-🎓 Full Stack Developer  
-📧 Email: [harshbh20102@gmail.com](mailto:harshbh20102@gmail.com)  
-🔗 LinkedIn: [linkedin.com/in/harshbh7](https://www.linkedin.com/in/harshbh7)  
-
+- **HARSH SHARMA** – Web Developer
+```
