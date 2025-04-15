@@ -14,7 +14,6 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 
-const DATABASE_URL = import.meta.env.VITE_FIREBASE_DATABASE_URL;
 
 const FIREBASE_URL = `https://college-fde10-default-rtdb.firebaseio.com/attendance.json`;
 const STUDENT_LIST_URL = `https://college-fde10-default-rtdb.firebaseio.com/student_list.json`;

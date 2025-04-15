@@ -13,7 +13,7 @@ const DashboardCards = ({ role }) => {
     console.log("User Role:", role);
   }, [role]);
   
-  const DATABASE_URL = import.meta.env.VITE_FIREBASE_DATABASE_URL;
+ 
 
   useEffect(() => {
     const fetchStudentCount = async () => {

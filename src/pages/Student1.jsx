@@ -24,7 +24,6 @@ const Student1 = () => {
   const [isLoading, setIsLoading] = useState(true);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  const DATABASE_URL = import.meta.env.VITE_FIREBASE_DATABASE_URL;
 
   const API_URL = `https://college-fde10-default-rtdb.firebaseio.com/student_list.json`;
 

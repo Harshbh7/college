@@ -37,7 +37,6 @@ function getTargetLocation() {
 const targetLocation = getTargetLocation();
 const maxDistance = 5000;
 
-const DATABASE_URL = import.meta.env.VITE_FIREBASE_DATABASE_URL;
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371000;

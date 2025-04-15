@@ -43,7 +43,6 @@ const StuAttendance = () => {
     "July", "August", "September", "October", "November", "December",
   ];
 
-  const DATABASE_URL = import.meta.env.VITE_FIREBASE_DATABASE_URL;
   const getDaysInMonth = (month, year) => new Date(year, month, 0).getDate();
 
   const getCurrentDate = () => {
