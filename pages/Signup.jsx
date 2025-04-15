@@ -47,7 +47,7 @@ const Signup = () => {
       const userId = userCredential.user.uid;  // Get user ID from Firebase Auth
 
       // Get the current 'sr' value from the counter in Firebase
-      const srRef = ref(db, 'student_data/counter');
+      const srRef = ref(db, 'student_list/counter');
       const snapshot = await get(srRef);
 
       let sr = 1;  // Default starting value for 'sr'
@@ -56,7 +56,7 @@ const Signup = () => {
       }
 
       // Write user data to Firebase Realtime Database
-      await set(ref(db, 'student_data/' + userId), {
+      await set(ref(db, 'student_list/' + userId), {
         name: `${firstName} ${lastName}`,
         fathername: fatherName,  // Added father name
         mothername: motherName,  // Added mother name
@@ -70,7 +70,7 @@ const Signup = () => {
       });
 
       // Update the 'sr' counter in Firebase
-      await update(ref(db, 'student_data'), {
+      await update(ref(db, 'student_list'), {
         counter: sr  // Update the counter to the new 'sr' value
       });
 
