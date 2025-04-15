@@ -46,9 +46,9 @@ const Signup = () => {
       const db = getDatabase();
       const userId = userCredential.user.uid;  // Get user ID from Firebase Auth
 
-      // Get the current 'sr' value from the counter in Firebase
-      const srRef = ref(db, 'student_list/counter');
-      const snapshot = await get(srRef);
+      // // Get the current 'sr' value from the counter in Firebase
+      // const srRef = ref(db, 'student_list/counter');
+      // const snapshot = await get(srRef);
 
       let sr = 1;  // Default starting value for 'sr'
       if (snapshot.exists()) {
