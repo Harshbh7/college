@@ -58,7 +58,7 @@ const StuAttendance = () => {
   const fetchStudentDetails = async (email) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${DATABASE_URL}student_list.json`);
+      const response = await axios.get(`https://college-fde10-default-rtdb.firebaseio.com/student_list.json`);
       if (!response.data) throw new Error("Failed to fetch student details.");
 
       const data = response.data;

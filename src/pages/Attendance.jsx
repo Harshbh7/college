@@ -79,11 +79,11 @@ const Attendance = () => {
       if (!year || !month || !date) return;
       setLoading(true);
       try {
-        const studentRes = await fetch(`${DATABASE_URL}/student_list.json`);
+        const studentRes = await fetch(`https://college-fde10-default-rtdb.firebaseio.com/student_list.json`);
         const studentData = await studentRes.json();
 
         const attendanceRes = await fetch(
-          `${DATABASE_URL}/attendance/${year}/${month}/${date}.json`
+          `https://college-fde10-default-rtdb.firebaseio.com/attendance/${year}/${month}/${date}.json`
         );
         const attendanceData = await attendanceRes.json();
 
@@ -128,7 +128,7 @@ const Attendance = () => {
     }
 
     try {
-      const url = `${DATABASE_URL}/attendance/${year}/${month}/${date}/${id}.json`;
+      const url = `https://college-fde10-default-rtdb.firebaseio.com/attendance/${year}/${month}/${date}/${id}.json`;
       const res = await fetch(url, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -315,7 +315,7 @@ export default Attendance;
 //     setLoading(true);
 //     try {
 //       const response = await fetch(
-//         "${DATABASE_URL}/student_list/-OFg7ivkOKVsAzxEEQP7.json"
+//         "https://college-fde10-default-rtdb.firebaseio.com/student_list/-OFg7ivkOKVsAzxEEQP7.json"
 //       );
 
 //       if (!response.ok) {
@@ -366,7 +366,7 @@ export default Attendance;
 //           }
 
 //           const response = await fetch(
-//             `${DATABASE_URL}/attendance/${year}/${month}/${date}/-OFg7ivkOKVsAzxEEQP7/status.json`
+//             `https://college-fde10-default-rtdb.firebaseio.com/attendance/${year}/${month}/${date}/-OFg7ivkOKVsAzxEEQP7/status.json`
 //           );
 
 //           if (!response.ok) {

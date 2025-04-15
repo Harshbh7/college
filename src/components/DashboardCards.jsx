@@ -19,7 +19,7 @@ const DashboardCards = ({ role }) => {
     const fetchStudentCount = async () => {
       try {
         const response = await axios.get(
-          `${DATABASE_URL}/student_list.json`
+          `https://college-fde10-default-rtdb.firebaseio.com/student_list.json`
         );
         const data = response.data;
         if (data) {
