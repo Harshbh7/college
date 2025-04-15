@@ -31,55 +31,45 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Check if passwords match
     if (password !== confirmPassword) {
       setError("Passwords do not match!");
       return;
     }
-
+  
     try {
       // Firebase create user with email and password
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
+  
       // Firebase Realtime Database reference
       const db = getDatabase();
-      const userId = userCredential.user.uid;  // Get user ID from Firebase Auth
-
-      // // Get the current 'sr' value from the counter in Firebase
-      // const srRef = ref(db, 'student_list/counter');
-      // const snapshot = await get(srRef);
-
-      let sr = 1;  // Default starting value for 'sr'
-      if (snapshot.exists()) {
-        sr = snapshot.val() + 1;  // Increment the last 'sr' value by 1
-      }
-
+      const userId = userCredential.user.uid;
+  
+      // Set default sr value (you can change this if needed)
+      const sr = 1;
+  
       // Write user data to Firebase Realtime Database
       await set(ref(db, 'student_list/' + userId), {
         name: `${firstName} ${lastName}`,
-        fathername: fatherName,  // Added father name
-        mothername: motherName,  // Added mother name
+        fathername: fatherName,
+        mothername: motherName,
         mobile: mobile,
         email: email,
-        sr: sr,  // Assign the incremented 'sr'
+        sr: sr,
         dob: dob,
         address: address,
         wrn: wrn,
         en: enrollmentNo,
       });
-
-      // Update the 'sr' counter in Firebase
-      await update(ref(db, 'student_list'), {
-        counter: sr  // Update the counter to the new 'sr' value
-      });
-
+  
       // On successful signup, navigate to the login page
       navigate('/login');
     } catch (err) {
-      setError(err.message);  // Set error message on failed signup
+      setError(err.message);
     }
   };
+  
 
   return (
     <Grid container justifyContent="center" alignItems="center" sx={{ height: '100vh', bgcolor: '#f5f5f5' }}>
