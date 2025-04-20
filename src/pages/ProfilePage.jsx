@@ -1,5 +1,4 @@
 // src/pages/ProfilePage.jsx
-// src/pages/ProfilePage.jsx
 import React, { useState, useEffect, useRef } from "react";
 import {
   Box,

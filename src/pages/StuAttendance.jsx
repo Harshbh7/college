@@ -1,5 +1,4 @@
 // src/pages/StuAttendance.jsx
-// src/pages/StuAttendance.jsx
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import {
