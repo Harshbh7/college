@@ -20,16 +20,21 @@ import {
 import "../styles/Student1.css";
 
 const Student1 = () => {
-  const [Student1, setStudent1] = useState([]);
+  const [students, setStudents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  const DATABASE_URL = import.meta.env.VITE_FIREBASE_DATABASE_URL;
+  const API_URL = `https://college-fde10-default-rtdb.firebaseio.com/student_list.json`;
 
-  const API_URL = `${DATABASE_URL}/student_list.json`;
+  const maskString = (str) => {
+    if (!str) return ""; // handles null or undefined
+    const strValue = String(str); // ensure it's a string
+    if (strValue.length <= 2) return strValue;
+    return strValue.slice(0, 2) + "*".repeat(strValue.length - 2);
+  };
+  
 
-  // Fetch Student1 from API
-  const fetchStudent1 = async () => {
+  const fetchStudents = async () => {
     setIsLoading(true);
     try {
       const response = await axios.get(API_URL);
@@ -39,17 +44,17 @@ const Student1 = () => {
           ...data[key],
           id: key,
         }))
-        .sort((a, b) => parseInt(a.sr) - parseInt(b.sr)); // Sort by `sr`
-      setStudent1(formattedData);
+        .sort((a, b) => parseInt(a.sr) - parseInt(b.sr));
+      setStudents(formattedData);
     } catch (error) {
-      Swal.fire("Error", "Failed to fetch Student1", "error");
+      Swal.fire("Error", "Failed to fetch student list", "error");
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchStudent1();
+    fetchStudents();
   }, []);
 
   if (isLoading) {
@@ -76,7 +81,7 @@ const Student1 = () => {
         📜 Student List
       </Typography>
 
-      {/* Table (Desktop View) */}
+      {/* Desktop Table View */}
       {!isMobile ? (
         <TableContainer component={Paper} className="table-container">
           <Table>
@@ -94,37 +99,39 @@ const Student1 = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {Student1.map((student) => (
+              {students.map((student) => (
                 <TableRow key={student.id} className="table-row">
                   <TableCell>{student.sr}</TableCell>
-                  <TableCell>{student.en}</TableCell>
-                  <TableCell>{student.rollNo}</TableCell>
-                  <TableCell>{student.wrn}</TableCell>
+                  <TableCell>{maskString(student.en)}</TableCell>
+                  <TableCell>{maskString(student.rollNo)}</TableCell>
+                  <TableCell>{maskString(student.wrn)}</TableCell>
                   <TableCell>{student.name}</TableCell>
-                  <TableCell>{student.fathername}</TableCell>
+                  <TableCell>{maskString(student.fathername)}</TableCell>
                   <TableCell>{student.gender}</TableCell>
-                  <TableCell>{student.mobile}</TableCell>
-                  <TableCell>{student.address}</TableCell>
+                  <TableCell>{maskString(student.mobile)}</TableCell>
+                  <TableCell>{maskString(student.address)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
       ) : (
-        // Mobile View (Key-Value Format)
+        // Mobile View
         <div className="mobile-card-container">
-          {Student1.map((student) => (
+          {students.map((student) => (
             <div key={student.id} className="student-card">
-              <Typography variant="h6" className="student-title">📌 {student.name}</Typography>
+              <Typography variant="h6" className="student-title">
+                📌 {student.name}
+              </Typography>
               <div className="student-info">
                 <p><strong>SR No:</strong> {student.sr}</p>
-                <p><strong>EN No:</strong> {student.en}</p>
-                <p><strong>Roll No:</strong> {student.rollNo}</p>
-                <p><strong>WRN:</strong> {student.wrn}</p>
-                <p><strong>Father's Name:</strong> {student.fathername}</p>
+                <p><strong>EN No:</strong> {maskString(student.en)}</p>
+                <p><strong>Roll No:</strong> {maskString(student.rollNo)}</p>
+                <p><strong>WRN:</strong> {maskString(student.wrn)}</p>
+                <p><strong>Father's Name:</strong> {maskString(student.fathername)}</p>
                 <p><strong>Gender:</strong> {student.gender}</p>
-                <p><strong>Mobile No:</strong> {student.mobile}</p>
-                <p><strong>Address:</strong> {student.address}</p>
+                <p><strong>Mobile No:</strong> {maskString(student.mobile)}</p>
+                <p><strong>Address:</strong> {maskString(student.address)}</p>
               </div>
             </div>
           ))}
