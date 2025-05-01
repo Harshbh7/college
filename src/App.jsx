@@ -1,7 +1,6 @@
-// src/App.jsx
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Box, CssBaseline } from '@mui/material';
+import { Box, CssBaseline, Fab } from '@mui/material';
 import Header from './components/Header';
 import DashboardCards from './components/DashboardCards';
 import WeeklySchedule from './components/WeeklySchedule';
@@ -14,6 +13,8 @@ import { auth } from './firebaseConfig';
 import Sidebar from './components/Sidebar';
 import ProfilePage from './pages/ProfilePage';
 import ACALogo from './assets/ACALogo.png';
+import PersonIcon from '@mui/icons-material/Person';
+import Chatbot from './components/Chatbot';
 
 // Lazy-loaded components
 const Attendance = lazy(() => import('./pages/Attendance'));
@@ -27,29 +28,13 @@ const Chat = lazy(() => import('./pages/Chat'));
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [role, setRole] = useState(null);
-  const [isPWA, setIsPWA] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); 
-
-  useEffect(() => {
-    if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) {
-      setIsPWA(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("../dist/service-worker").then(() => {
-          console.log("Service Worker Registered");
-        });
-      });
-    }
-  }, []);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showChatbot, setShowChatbot] = useState(false);
 
   useEffect(() => {
     const splashTimeout = setTimeout(() => {
       setIsLoading(false);
-    }, 5000); 
+    }, 5000);
 
     return () => clearTimeout(splashTimeout);
   }, []);
@@ -137,7 +122,7 @@ const App = () => {
                         <Route path="/exams" element={<Exams />} />
                         <Route path="/students" element={<Students />} />
                         <Route path="/attendance" element={<Attendance />} />
-                        <Route path="/chat" element={<Chat />} />
+                        <Route path="/chat" element={<Chat role={role} />} />
                       </>
                     ) : (
                       <>
@@ -182,6 +167,57 @@ const App = () => {
             </Suspense>
           </Box>
         </Box>
+
+        {/* Floating Chatbot */}
+        {isAuthenticated && (
+          <>
+            <Box
+              sx={{
+                position: 'fixed',
+                bottom: 16,
+                right: 16,
+                zIndex: 1500,
+              }}
+            >
+              <Fab
+                color="primary"
+                aria-label="chat"
+                onClick={() => setShowChatbot((prev) => !prev)}
+              >
+                <PersonIcon />
+              </Fab>
+            </Box>
+
+            {showChatbot && (
+  <Box
+    sx={{
+      position: 'fixed',
+      bottom: 80,
+      right: 16,
+      width: {
+        xs: '90vw',  // 320px - 600px
+        sm: 350,     // 600px - 900px
+        md: 400,     // 900px and up
+      },
+      height: {
+        xs: '70vh',
+        sm: 500,
+      },
+      bgcolor: 'white',
+      boxShadow: 6,
+      borderRadius: 2,
+      zIndex: 1500,
+      overflow: 'hidden',
+      display: 'flex',
+      flexDirection: 'column',
+    }}
+  >
+    <Chatbot />
+  </Box>
+)}
+
+          </>
+        )}
       </Box>
     </Router>
   );

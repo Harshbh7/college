@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Grid, InputAdornment, IconButton, Link, FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword } from 'firebase/auth';  // Firebase import for auth
-import { auth } from '../firebaseConfig';  // Firebase auth import
-import { getDatabase, ref, set, get, child, update } from 'firebase/database';  // Firebase Realtime Database import
+import { createUserWithEmailAndPassword } from 'firebase/auth'; 
+import { auth } from '../firebaseConfig'; 
+import { getDatabase, ref, set, get, child, update } from 'firebase/database';  
 
 const Signup = () => {
   const [firstName, setFirstName] = useState('');

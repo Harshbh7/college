@@ -594,3 +594,36 @@ const Chat = () => {
 };
 
 export default Chat;
+
+
+// import React from 'react';
+// import { Box, Typography, Button } from '@mui/material';
+
+// const Chat = ({ role }) => {
+//   const handleSendMessage = () => {
+//     if (role === 'admin') {
+//       console.log('Admin sending a message...');
+//       // Admin-specific send logic
+//     } else {
+//       console.log('Student sending a message...');
+//       // Student-specific send logic
+//     }
+//   };
+
+//   return (
+//     <Box sx={{ p: 3 }}>
+//       <Typography variant="h5" gutterBottom>
+//         {role === 'admin' ? 'Admin Chat Room' : 'Student Chat Room'}
+//       </Typography>
+
+//       {/* Chat messages list here */}
+
+//       <Button variant="contained" onClick={handleSendMessage}>
+//         {role === 'admin' ? 'Send as Admin' : 'Send as Student'}
+//       </Button>
+//     </Box>
+//   );
+// };
+
+// export default Chat;
+
