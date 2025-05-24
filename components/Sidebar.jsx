@@ -20,7 +20,7 @@ const Sidebar = ({ role }) => {
 
   const menuItems = [
     { text: 'Dashboard', path: '/', icon: <DashboardIcon /> },
-    { text: 'Courses', path: '/courses', icon: <BookIcon /> },
+    { text: 'Courses', path: role === 'admin' ? '/coursesAdmin' : '/courses', icon: <BookIcon /> },
     { text: 'Exams', path: '/exams', icon: <AssignmentIcon /> },
     { text: 'Students', path: role === 'admin' ? '/students' : '/student1', icon: <PeopleIcon /> },
     { text: 'Attendance', path: role === 'admin' ? '/attendance' : '/stuAttendance', icon: <EventIcon /> },

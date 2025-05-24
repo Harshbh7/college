@@ -1,45 +1,29 @@
 // src/pages/EBooks.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Card, CardContent, CardMedia, Typography, Grid, Modal, Box, TextField } from '@mui/material';
+import axios from 'axios';
+
+const FIREBASE_URL = 'https://college-fde10-default-rtdb.firebaseio.com/books';
 
 const EBooks = () => {
   const [open, setOpen] = useState(false);
   const [selectedEbook, setSelectedEbook] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [authorQuery, setAuthorQuery] = useState('');
+  const [ebooks, setEbooks] = useState([]);
 
-  const ebooks = [
-    {
-      title: 'Network Security',
-      author: 'William Stallings',
-      image: 'https://www.logsign.com/uploads/ensuring_network_security_e34d6ce4bb.png',
-      url: 'https://dl.hiva-network.com/Library/security/Cryptography-and-network-security-principles-and-practice.pdf',
-    },
-    {
-      title: 'Visual Basic .NET',
-      author: 'Michael Halvorson',
-      image: 'https://images.spiceworks.com/wp-content/uploads/2023/04/28084947/shutterstock_1918195625.jpg',
-      url: 'https://nibmehub.com/opac-service/pdf/read/Learning%20Visual%20Basic%20.NET.pdf',
-    },
-    {
-      title: 'Computer Network',
-      author: 'Andrew S. Tanenbaum',
-      image: 'https://miro.medium.com/v2/resize:fit:1024/0*yDZ4O2EsLoVJSdDC.jpeg',
-      url: 'https://csc-knu.github.io/sys-prog/books/Andrew%20S.%20Tanenbaum%20-%20Computer%20Networks.pdf',
-    },
-    {
-      title: 'System Design & Algorithms',
-      author: 'A. A. Puntambekar',
-      image: 'https://www.silveredge-gs.com/wp-content/uploads/AdobeStock_563424092.webp',
-      url: 'https://www.cet.edu.in/noticefiles/278_DAA%20Complete.pdf',
-    },
-    {
-      title: 'Design & Analysis of Algorithms',
-      author: 'Thomas H. Cormen',
-      image: 'https://online.stanford.edu/sites/default/files/styles/embedded_large/public/2018-03/engineering-computer-science-algorithms-design-analysis_soe-ycsalgorithms.png?itok=9li5BBeK',
-      url: 'https://dl.ebooksworld.ir/books/Introduction.to.Algorithms.4th.Leiserson.Stein.Rivest.Cormen.MIT.Press.9780262046305.EBooksWorld.ir.pdf',
-    },
-  ];
+  useEffect(() => {
+    axios.get(`${FIREBASE_URL}.json`).then((response) => {
+      const data = response.data;
+      if (data) {
+        const loadedBooks = Object.keys(data).map((key) => ({
+          id: key,
+          ...data[key],
+        }));
+        setEbooks(loadedBooks);
+      }
+    });
+  }, []);
 
   const handleOpen = (ebook) => {
     setSelectedEbook(ebook);
@@ -59,10 +43,10 @@ const EBooks = () => {
     );
 
     if (filteredEbooks.length > 0) {
-      setSelectedEbook(filteredEbooks[0]); // Show first matched book
+      setSelectedEbook(filteredEbooks[0]);
       setOpen(true);
     } else {
-      alert("No matching eBook found.");
+      alert('No matching eBook found.');
     }
   };
 
@@ -105,6 +89,9 @@ const EBooks = () => {
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
                   {ebook.author}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Subject: {ebook.subject}
                 </Typography>
                 <Button
                   variant="contained"

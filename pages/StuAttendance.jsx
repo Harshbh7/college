@@ -1,5 +1,4 @@
 // src/pages/StuAttendance.jsx
-// src/pages/StuAttendance.jsx
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import {
@@ -43,7 +42,6 @@ const StuAttendance = () => {
     "July", "August", "September", "October", "November", "December",
   ];
 
-  const DATABASE_URL = import.meta.env.VITE_FIREBASE_DATABASE_URL;
   const getDaysInMonth = (month, year) => new Date(year, month, 0).getDate();
 
   const getCurrentDate = () => {
@@ -58,7 +56,7 @@ const StuAttendance = () => {
   const fetchStudentDetails = async (email) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${DATABASE_URL}student_list.json`);
+      const response = await axios.get(`https://college-fde10-default-rtdb.firebaseio.com/student_list.json`);
       if (!response.data) throw new Error("Failed to fetch student details.");
 
       const data = response.data;

@@ -23,7 +23,7 @@ const Header = ({ onLogout }) => {
       if (user) {
         try {
           const response = await axios.get(
-            `${DATABASE_URL}/student_list.json`
+            `https://college-fde10-default-rtdb.firebaseio.com/student_list.json`
           );
           const studentsData = response.data;
 
@@ -38,7 +38,7 @@ const Header = ({ onLogout }) => {
           // Listen for real-time updates to profile image
           const interval = setInterval(async () => {
             const updatedResponse = await axios.get(
-              `${DATABASE_URL}/student_list.json`
+              `https://college-fde10-default-rtdb.firebaseio.com/student_list.json`
             );
             const updatedData = updatedResponse.data;
 
@@ -120,7 +120,6 @@ const Header = ({ onLogout }) => {
         sx={{ mt: 1 }}
       >
         <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Settings</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </Box>

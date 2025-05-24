@@ -13,13 +13,13 @@ const DashboardCards = ({ role }) => {
     console.log("User Role:", role);
   }, [role]);
   
-  const DATABASE_URL = import.meta.env.VITE_FIREBASE_DATABASE_URL;
+ 
 
   useEffect(() => {
     const fetchStudentCount = async () => {
       try {
         const response = await axios.get(
-          `${DATABASE_URL}/student_list.json`
+          `https://college-fde10-default-rtdb.firebaseio.com/student_list.json`
         );
         const data = response.data;
         if (data) {

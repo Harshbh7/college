@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Grid, InputAdornment, IconButton, Link, FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword } from 'firebase/auth';  // Firebase import for auth
-import { auth } from '../firebaseConfig';  // Firebase auth import
-import { getDatabase, ref, set, get, child, update } from 'firebase/database';  // Firebase Realtime Database import
+import { createUserWithEmailAndPassword } from 'firebase/auth'; 
+import { auth } from '../firebaseConfig'; 
+import { getDatabase, ref, set, get, child, update } from 'firebase/database';  
 
 const Signup = () => {
   const [firstName, setFirstName] = useState('');
@@ -58,16 +58,18 @@ const Signup = () => {
       // Write user data to Firebase Realtime Database
       await set(ref(db, 'student_list/' + userId), {
         name: `${firstName} ${lastName}`,
-        fathername: fatherName,  // Added father name
-        mothername: motherName,  // Added mother name
+        fathername: fatherName,
+        mothername: motherName,
         mobile: mobile,
         email: email,
-        sr: sr,  // Assign the incremented 'sr'
+        sr: sr,
         dob: dob,
+        gender: gender,  // <-- add this
         address: address,
         wrn: wrn,
         en: enrollmentNo,
       });
+      
 
       // Update the 'sr' counter in Firebase
       await update(ref(db, 'student_list'), {
